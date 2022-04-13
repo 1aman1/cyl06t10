@@ -8,11 +8,13 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    ListNode* oddEvenList(ListNode* head) {
+    ListNode *oddEvenList(ListNode *head)
+    {
         /*
-        we will inter weave the list so that the nodes at even position are adjacent to one another, 
+        we will inter weave the list so that the nodes at even position are adjacent to one another,
         like wise for odd nodes
 
         1. keep odd to first node, even to odd->next node
@@ -21,24 +23,25 @@ public:
         4. Once sequencing done, append the even list to odd list in the end
         */
 
-        if(!head) return head;
+        if (!head)
+            return head;
 
         ListNode *odd, *even, *evenHead;
-        
+
         // 1.
-        odd  = head;
+        odd = head;
         even = head->next;
 
         // 2.
         evenHead = even;
 
-        while( even && even->next ) {
+        while (even && even->next)
+        {
             // 3.
             odd->next = odd->next->next;
             even->next = even->next->next;
             odd = odd->next;
             even = even->next;
-        
         }
 
         // 4.
