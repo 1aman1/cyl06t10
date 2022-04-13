@@ -1,13 +1,16 @@
 //* Definition for singly-linked list.
- struct ListNode {
-     int val;
-     ListNode *next;
-     ListNode(int x) : val(x), next(NULL) {}
- };
+struct ListNode
+{
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
 //*/
-class Solution {
+class Solution
+{
 public:
-    ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+    ListNode *mergeInBetween(ListNode *list1, int a, int b, ListNode *list2)
+    {
         /*
         find
         n - 1
@@ -15,9 +18,10 @@ public:
         nodes by traversing first
         */
         ListNode *traverse = list1, *n_prePtr = nullptr, *m_nxtPtr = nullptr;
-        int i = a -1;
+        int i = a - 1;
 
-        while ( i ) {
+        while (i)
+        {
             traverse = traverse->next;
             --i;
         }
@@ -27,24 +31,24 @@ public:
 
         traverse = list1;
 
-        while ( i ) {
+        while (i)
+        {
             traverse = traverse->next;
             --i;
         }
         m_nxtPtr = traverse->next;
 
-        // wee have both pointers now, 
+        // wee have both pointers now,
         // insert the list2 in betweek indexes by mending the pointers
 
         n_prePtr->next = list2;
 
-        while ( list2->next ) {
+        while (list2->next)
+        {
             list2 = list2->next;
         }
         list2->next = m_nxtPtr;
 
         return list1;
-
     }
 };
-
