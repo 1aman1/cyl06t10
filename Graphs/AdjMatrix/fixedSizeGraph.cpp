@@ -1,3 +1,11 @@
+/*
+This graph uses fixed size matrix
+
+#implements:
+
+>function() pathFinder
+-> checks if path exists from one node to the other
+*/
 #include <iostream>
 
 #define DEBUG false
@@ -48,16 +56,16 @@ bool graph::pathFinder(int source, int target)
         visited[source] = true;
 
         if (DEBUG)
-            std::cout << ":checking node: " << source << std::endl;
+            std::cout << " :checking node: " << source << std::endl;
         for (int col = 0; col < 4; ++col)
         {
             if (DEBUG)
-                std::cout << __LINE__ << ":  from:" << source << ":to: " << col << std::endl;
+                std::cout << __LINE__ << " :  from: " << source << " :to: " << col << std::endl;
 
             if (matGraph[source][col] == true)
             {
                 if (DEBUG)
-                    std::cout << __LINE__ << ":   edge between:" << source << ":" << col << std::endl;
+                    std::cout << __LINE__ << " :   edge between:" << source << ":" << col << std::endl;
 
                 // path exists
                 if (col == target)
