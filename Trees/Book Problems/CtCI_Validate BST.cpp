@@ -11,87 +11,52 @@ struct t_Node
     t_Node(int newdata) : node_data(newdata), left(nullptr), right(nullptr) {}
 };
 
-class tree
+bool validateBST(int MIN, t_Node *curr, int MAX)
 {
-private:
-public:
-    t_Node *root;
-    tree();
-    t_Node *insert(int, t_Node *);
-};
-
-tree::tree()
-{
-    root = nullptr;
-}
-
-t_Node *tree::insert(int newdata, t_Node *ptr)
-{
-    DEBUG == true ? std::cout << __FUNCTION__ << std::endl : std::cout;
-
-    if (!ptr)
+    if (curr)
     {
-        DEBUG == true ? std::cout << " creating new node with " << newdata << std::endl : std::cout;
-        return new t_Node(newdata);
+        DEBUG == true ? std::cout << __FUNCTION__ << std::endl : std::cout;
+
+        if (MIN < curr->node_data && curr->node_data < MAX)
+        {
+            DEBUG == true ? std::cout << curr->node_data << " MIN < node data < MAX  " << std::endl : std::cout;
+
+            return validateBST(MIN, curr->left, curr->node_data) && validateBST(curr->node_data, curr->right, MAX);
+        }
+        else
+        {
+            return false;
+        }
     }
-
-    if (newdata < ptr->node_data)
-    {
-        DEBUG == true ? std::cout << " new data is smaller " << newdata << std::endl : std::cout;
-
-        ptr->left = insert(newdata, ptr->left);
-    }
-
-    else //(newdata > ptr->node_data)
-    {
-        DEBUG == true ? std::cout << " new data is bigger " << newdata << std::endl : std::cout;
-
-        ptr->right = insert(newdata, ptr->right);
-    }
-
-    return ptr;
-}
-
-bool validateBST(t_Node *ptr, int MIN, int MAX)
-{
-    /*
-    if bt is bst
-
-    left sub tree node values have to be lesser than current
-    opp. for right sub tree
-
-    */
-
-    if (  )
-    if (ptr->node_data < MAX)
-    {
-        // going down to left
-        validateBST(ptr->left, MIN, ptr->node_data - 1);
-    }
-    else {
-        // going down to right
-        validateBST(ptr->left, MIN, ptr->node_data - 1);
-    }
-
+    else
+        return true;
 }
 
 int main()
 {
-    tree obj;
+    t_Node *testroot1 = new t_Node(2);
+    testroot1->left = new t_Node(1);
+    testroot1->right = new t_Node(3);
 
-    DEBUG == true ? std::cout << "  insert 2 " << std::endl : std::cout;
+    std::cout << testroot1->node_data << std::endl;
+    std::cout << testroot1->left->node_data << std::endl;
+    std::cout << testroot1->right->node_data << std::endl;
 
-    obj.root = obj.insert(2, obj.root);
-    DEBUG == true ? std::cout << "  insert 1 " << std::endl : std::cout;
-    obj.root = obj.insert(1, obj.root);
-    DEBUG == true ? std::cout << "  insert 3 " << std::endl : std::cout;
-    obj.root = obj.insert(3, obj.root);
+    std::cout << std::boolalpha
+              << validateBST(INT_MIN, testroot1, INT_MAX)
+              << std::endl;
 
-    std::cout << obj.root->node_data << std::endl;
-    std::cout << obj.root->left->node_data << std::endl;
-    std::cout << obj.root->right->node_data << std::endl;
+    t_Node *testroot2 = new t_Node(4);
+    testroot2->left = new t_Node(2);
+    testroot2->left->right = new t_Node(6);
 
-    validateBST(obj.root, INT_MIN, INT_MAX);
+    std::cout << testroot2->node_data << std::endl;
+    std::cout << testroot2->left->node_data << std::endl;
+    std::cout << testroot2->left->right->node_data << std::endl;
+
+    std::cout << std::boolalpha
+              << validateBST(INT_MIN, testroot2, INT_MAX)
+              << std::endl;
 
     return 0;
 }
