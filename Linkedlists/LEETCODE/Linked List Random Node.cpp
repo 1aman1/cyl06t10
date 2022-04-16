@@ -8,7 +8,8 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
     vector<int> myVec;
     /*
@@ -17,23 +18,25 @@ public:
     2. return random number within size of vector using rand()
     */
 
-    Solution(ListNode* head) {
-        ListNode* traverse = head;
-        while( traverse ) {
+    Solution(ListNode *head)
+    {
+        ListNode *traverse = head;
+        while (traverse)
+        {
             // 1.
-            myVec.push_back( traverse->val );
-            
+            myVec.push_back(traverse->val);
+
             // 1.b.
             head = head->next;
             delete traverse;
             traverse = head;
-            
         }
     }
-    
-    int getRandom() {
+
+    int getRandom()
+    {
         // 2.
-        return myVec[ rand() %myVec.size() ];
+        return myVec[rand() % myVec.size()];
     }
 };
 
