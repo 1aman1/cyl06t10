@@ -55,24 +55,21 @@ bool graph::pathFinder(int source, int target)
     {
         visited[source] = true;
 
-        if (DEBUG)
-            std::cout << " :checking node: " << source << std::endl;
+        DEBUG == true ? std::cout << " :checking node: " << source << std::endl : std::cout;
+
         for (int col = 0; col < 4; ++col)
         {
-            if (DEBUG)
-                std::cout << __LINE__ << " :  from: " << source << " :to: " << col << std::endl;
+            DEBUG == true ? std::cout << __LINE__ << " :  from: " << source << " :to: " << col << std::endl : std::cout;
 
             if (matGraph[source][col] == true)
             {
-                if (DEBUG)
-                    std::cout << __LINE__ << " :   edge between:" << source << ":" << col << std::endl;
+                DEBUG == true ? std::cout << __LINE__ << " :   edge between:" << source << ":" << col << std::endl : std::cout;
 
                 // path exists
                 if (col == target)
                     return true;
 
-                if (DEBUG)
-                    std::cout << __LINE__ << ":    going to check between:" << col << ":" << target << std::endl;
+                DEBUG == true ? std::cout << __LINE__ << ":    going to check between:" << col << ":" << target << std::endl : std::cout;
 
                 return pathFinder(col, target);
             }
