@@ -17,7 +17,7 @@ public:
     t_Node *root;
     tree();
     t_Node *insert(int, t_Node *);
-    t_Node *inOrder(t_Node *);
+    void inOrder(t_Node *);
 };
 
 tree::tree()
@@ -58,7 +58,7 @@ void insertInSeq(tree &obj, int arr[], int left, int right)
     {
         int mid = (right - left) / 2 + left;
         std::cout << arr[mid] << std::endl;
-        obj.insert(arr[mid], obj.root);
+        obj.root = obj.insert(arr[mid], obj.root);
 
         insertInSeq(obj, arr, left, mid - 1);
         insertInSeq(obj, arr, mid + 1, right);
@@ -66,7 +66,7 @@ void insertInSeq(tree &obj, int arr[], int left, int right)
     return;
 }
 
-t_Node *tree::inOrder(t_Node *ptr)
+void tree::inOrder(t_Node *ptr)
 {
     if (!ptr)
         return;
