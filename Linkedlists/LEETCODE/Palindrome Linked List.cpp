@@ -1,4 +1,4 @@
-#include<stack>
+#include <stack>
 
 /**
  * Definition for singly-linked list.
@@ -10,28 +10,32 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
+class Solution
+{
 public:
-    bool isPalindrome(ListNode* head) {
-        ListNode* traverse = head;
+    bool isPalindrome(ListNode *head)
+    {
+        ListNode *traverse = head;
         stack<int> myStack;
 
         int length = 0, index = 0, halflength = 0;
 
         // push the linkedlist into stack
 
-        while ( traverse ) {
-            myStack.push( traverse->val );
+        while (traverse)
+        {
+            myStack.push(traverse->val);
             traverse = traverse->next;
             ++length;
         }
 
         // match the stack by traversing list again
-        halflength = length /2;
+        halflength = length / 2;
         traverse = head;
 
-        while ( traverse && index < halflength) {
-            if ( myStack.top() != traverse->val )
+        while (traverse && index < halflength)
+        {
+            if (myStack.top() != traverse->val)
                 return false;
             myStack.pop();
             traverse = traverse->next;
