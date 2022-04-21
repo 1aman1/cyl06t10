@@ -45,13 +45,13 @@ int main()
 
     std::set<int> buffer;
 
+    // removal logic, takes O(n)
     Node *current;
     Node *previous;
 
     previous = nullptr;
     current = list;
 
-    // removal logic, takes O(n)
     while (current)
     {
         if (buffer.find(current->data) != buffer.end())
