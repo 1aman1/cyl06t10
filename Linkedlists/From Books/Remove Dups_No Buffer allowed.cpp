@@ -59,6 +59,7 @@ int main()
         }
         current = current->next;
     }
+    
     print(head);
 
     return 0;
