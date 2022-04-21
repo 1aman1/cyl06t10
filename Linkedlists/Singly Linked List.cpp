@@ -23,8 +23,9 @@ public:
   bool empty();
   void print();
 
-  // function takes value to insert, position (optionally) to insert
-  bool insert(int, int = -1);
+  // function takes position (optionally) to insert, value to insert,
+  bool insert(int, int);
+  bool insert(int);
 
   // function removes the node at given position
   bool remove(int);
@@ -79,9 +80,8 @@ void linked_list::print()
   std::cout << std::endl;
 }
 
-bool linked_list::insert(int value, int pos)
+bool linked_list::insert(int value, int pos = -1)
 {
-
   // position is out of bounds
   if (pos > size() || pos < -1)
   {
@@ -99,20 +99,6 @@ bool linked_list::insert(int value, int pos)
     return true;
   }
 
-  // when position not given, insert in the end
-  if (pos == -1)
-  {
-    Node *temp = head;
-    // insert logic
-
-    while (temp->next)
-      temp = temp->next;
-    temp->next = new Node(value);
-
-    SLL_size++;
-    return true;
-  }
-
   // when position 0, insert at front
   if (pos == 0)
   {
@@ -126,13 +112,13 @@ bool linked_list::insert(int value, int pos)
   else
   {
     // position is > 0 and < size()
-
     int index = 0;
+
+    // insert logic
 
     Node *curr;
     Node *prev;
 
-    // insert logic
     prev = head;
     curr = prev->next;
 
@@ -196,6 +182,7 @@ bool linked_list::remove(int pos)
   }
 }
 
+/*
 void insertMod(linked_list &mylist, int value, int pos = -1)
 {
   if (mylist.insert(value, pos))
@@ -203,7 +190,7 @@ void insertMod(linked_list &mylist, int value, int pos = -1)
   else
     std::cout << "insert failed\n";
 }
-
+*/
 void removeMod(linked_list &mylist, int pos)
 {
   if (mylist.remove(pos))
@@ -230,13 +217,22 @@ int main()
 
     case 1:
     {
-      int value, pos;
+      int value, pos, locationChoice = 0;
       std::cout << "input value -> ";
       std::cin >> value;
-      std::cout << "input position -> ";
-      std::cin >> pos;
+      std::cout << "Want to insert at specific location ? -1 is no";
+      std::cin >> locationChoice;
 
-      insertMod(mylist, value, pos);
+      if (locationChoice != -1)
+      {
+        std::cout << "input position -> ";
+        std::cin >> pos;
+        std::cout << std::boolalpha << mylist.insert(pos, value);
+      }
+      else
+      {
+        std::cout << mylist.insert(value);
+      }
       break;
     }
 
