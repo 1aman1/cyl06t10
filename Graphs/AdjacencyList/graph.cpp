@@ -11,26 +11,25 @@ use a vector of lists
 then a function to check if path exists or not
 */
 
-/* TO EXECUTE 
+/* TO EXECUTE
  https://www.tutorialspoint.com/compile_cpp_online.php
 */
 
-
 struct graph
 {
-    std::vector<std::list<int>> adjacencyList;
-    graph(int s) : size(s)
+    std::list<int> *adjacencyList;
+    graph(int v) : vertices(v)
     {
-        adjacencyList.reserve(size);
+        adjacencyList = new std::list<int>[vertices];
     }
-    int size;
+    int vertices;
     void print();
     void add_edge(int, int);
 };
 
 void graph::print()
 {
-    for (int i = 1; i < 5; ++i)
+    for (int i = 1; i < 7; ++i)
     {
         std::cout << "vertex :" << i << " : ";
         {
@@ -46,23 +45,18 @@ void graph::print()
 
 void graph::add_edge(int u, int v)
 {
-    std::cout << u << " : " << v << std::endl;
     adjacencyList[u].push_back(v);
 }
 
-/* TO EXECUTE 
+/* TO EXECUTE
  https://www.tutorialspoint.com/compile_cpp_online.php
 */
-
 
 int main()
 {
     graph go(7);
-    std::cout << " obj create" << std::endl;
-    go.add_edge(1, 2);
 
-    std::cout << " add edge" << std::endl;
-    
+    go.add_edge(1, 2);
     go.add_edge(1, 4);
 
     go.add_edge(2, 5);
