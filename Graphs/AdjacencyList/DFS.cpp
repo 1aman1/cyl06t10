@@ -18,13 +18,18 @@ struct graph
     {
         adjacencyList = new std::list<int>[vertices];
         visited = new bool[vertices];
+        for (int i = 0; i < vertices; ++i)
+        {
+            visited[i] = false;
+        }
     }
+
     int vertices;
     bool *visited;
-    void print();
+
     void add_edge(int, int);
-    bool pathExists(int, int);
     void DFS(int);
+    void print();
 };
 
 void graph::print()
@@ -46,19 +51,6 @@ void graph::print()
 void graph::add_edge(int u, int v)
 {
     adjacencyList[u].push_back(v);
-}
-
-bool graph::pathExists(int u, int v)
-{
-    if (adjacencyList[u].empty())
-        return false;
-    for (std::list<int>::iterator it = adjacencyList[u].begin(); it != adjacencyList[u].end(); ++it)
-    {
-        if (*it == v)
-            return true;
-    }
-
-    return false;
 }
 
 void graph::DFS(int source)
@@ -96,11 +88,6 @@ int main()
     go.add_edge(3, 4);
 
     go.print();
-
-    for (int i = 0; i < go.vertices; ++i)
-    {
-        go.visited[i] = false;
-    }
 
     go.DFS(0);
 
