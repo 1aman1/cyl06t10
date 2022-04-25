@@ -11,10 +11,6 @@ use a vector of lists
 then a function to check if path exists or not
 */
 
-/* TO EXECUTE
- https://www.tutorialspoint.com/compile_cpp_online.php
-*/
-
 struct graph
 {
     std::list<int> *adjacencyList;
@@ -25,6 +21,7 @@ struct graph
     int vertices;
     void print();
     void add_edge(int, int);
+    bool findPath(int, int);
 };
 
 void graph::print()
@@ -48,9 +45,18 @@ void graph::add_edge(int u, int v)
     adjacencyList[u].push_back(v);
 }
 
-/* TO EXECUTE
- https://www.tutorialspoint.com/compile_cpp_online.php
-*/
+bool graph::findPath(int u, int v)
+{
+    if (adjacencyList[u].empty())
+        return false;
+    for (std::list<int>::iterator it = adjacencyList[u].begin(); it != adjacencyList[u].end(); ++it)
+    {
+        if (*it == v)
+            return true;
+    }
+
+    return false;
+}
 
 int main()
 {
@@ -71,6 +77,8 @@ int main()
     go.add_edge(6, 6);
 
     go.print();
+
+    std::cout << "path exists " << std::boolalpha << go.findPath(6, 1) << std::endl;
 
     return 0;
 }
