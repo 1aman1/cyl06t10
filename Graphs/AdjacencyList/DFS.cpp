@@ -1,35 +1,36 @@
 #include <iostream>
-#include <vector> 
 #include <list>
 #include <iterator>
+#include <vector>
 
 /*
-1-> implement graph using vector,
+1-> implement graph using array of list
 
-2-> a function to check if two nodes are connected
+2-> a function for DFS traversal
 */
 
 struct graph
 {
 	// graph utility
-	std::vector<std::list<int>> adjacencyList;
+	std::list<int> *adjacencyList;
+	int vertices;
 
 	graph(int v) : vertices(v)
 	{
-		visited.assign(vertices, false);
+		adjacencyList = new std::list<int>[vertices];
 
-		std::list<int> tmp;
-		adjacencyList.assign(vertices, tmp);
+		visited = new bool[vertices];
+		for (int i = 0; i < vertices; ++i)
+		{
+			visited[i] = false;
+		}
 	}
 
-	int vertices;
 	void add_edge(int, int);
-
-	// graph aux
 	void print();
 
 	// DFS utility
-	std::vector<bool> visited;
+	bool *visited;
 	void DFS(int);
 };
 

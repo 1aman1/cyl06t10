@@ -3,26 +3,27 @@
 #include <list>
 #include <iterator>
 
+/*
+1-> implement graph using vector of list
+
+2-> a function for DFS traversal
+*/
 
 struct graph
 {
 	// graph utility
-	std::list<int>* adjacencyList;
+	std::vector<std::list<int>> adjacencyList;
+	int vertices;
 
 	graph(int v) : vertices(v)
 	{
-		adjacencyList = new std::list<int>[vertices];
-		visited = new bool[vertices];
-		for (int i = 0; i < vertices; ++i)
-		{
-			visited[i] = false;
-		}
+		std::list<int> tmp;
+		adjacencyList.assign(vertices, tmp);
+
+		visited.assign(vertices, false);
 	}
 
-	int vertices;
 	void add_edge(int, int);
-
-	// graph aux
 	void print();
 
 	// DFS utility
