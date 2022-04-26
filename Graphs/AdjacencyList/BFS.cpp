@@ -5,19 +5,21 @@
 #include <queue>
 
 /*
-implement graph,
+1-> implement graph using array of list
 
-use a vector of lists
-
-then a function to check if path exists or not
+2-> a function for BFS traversal
 */
 
 struct graph
 {
+    // graph utility
     std::list<int> *adjacencyList;
+    int vertices;
+
     graph(int v) : vertices(v)
     {
         adjacencyList = new std::list<int>[vertices];
+
         visited = new bool[vertices];
         for (int i = 0; i < vertices; ++i)
         {
@@ -25,12 +27,12 @@ struct graph
         }
     }
 
-    int vertices;
-    bool *visited;
-
-    void add_edge(int, int);
-    void BFS(int);
     void print();
+    void add_edge(int, int);
+
+    // BFS utility
+    bool *visited;
+    void BFS(int);
 };
 
 void graph::print()
@@ -51,21 +53,23 @@ void graph::print()
 
 void graph::add_edge(int u, int v)
 {
+    // undirected graph
     adjacencyList[u].push_back(v);
+
+    // directed graph
+    // adjacencyList[v].push_back(u);
 }
 
 void graph::BFS(int source)
 {
     std::queue<int> Q;
-    visited[source] = true;
-    Q.emplace(source);
 
+    Q.emplace(source);
     while (!Q.empty())
     {
-        // if (visited[] == true)
-        //   continue;
         int top = Q.front();
         Q.pop();
+
         std::cout << "visiting " << top << std::endl;
         visited[top] = true;
 
@@ -73,8 +77,8 @@ void graph::BFS(int source)
         {
             if (visited[*it] != true)
             {
+                visited[*it] = true;
                 Q.push(*it);
-                // DFS(*it);
             }
         }
     }
