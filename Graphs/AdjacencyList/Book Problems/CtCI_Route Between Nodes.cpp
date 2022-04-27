@@ -2,36 +2,42 @@
 #include <vector>
 #include <list>
 #include <iterator>
+#include <queue>
 
 /*
-1-> implement graph using array,
+1-> implement graph using array of list
 
-2-> a function to check if two nodes are connected
+2-> a function for routeBetweenNode traversal
 */
 
 struct graph
 {
 	// graph utility
 	std::list<int> *adjacencyList;
+	int vertices;
 
 	graph(int v) : vertices(v)
 	{
 		adjacencyList = new std::list<int>[vertices];
+
+		visited = new bool[vertices];
+		for (int i = 0; i < vertices; ++i)
+		{
+			visited[i] = false;
+		}
 	}
 
-	int vertices;
+	void print();
 	void add_edge(int, int);
 
-	// graph aux
-	void print();
-
-	// path utility
-	bool routeBetweenNodes(int, int);
+	// BFS utility for route between nodes
+	bool *visited;
+	bool routeBetweenNode(int, int);
 };
 
 void graph::print()
 {
-	for (int i = 1; i < 7; ++i)
+	for (int i = 0; i < vertices; ++i)
 	{
 		std::cout << "vertex :" << i << " : ";
 		{
@@ -47,45 +53,69 @@ void graph::print()
 
 void graph::add_edge(int u, int v)
 {
+	// undirected graph
 	adjacencyList[u].push_back(v);
+
+	// directed graph
+	// adjacencyList[v].push_back(u);
 }
 
-bool graph::routeBetweenNodes(int u, int v)
+bool graph::routeBetweenNode(int source, int target)
 {
-	if (u == v)
-		return true;
-	if (adjacencyList[u].empty())
-		return false;
-	for (std::list<int>::iterator it = adjacencyList[u].begin(); it != adjacencyList[u].end(); ++it)
+	if (source == target)
 	{
-		if (*it == v)
-			return true;
+		return true;
 	}
 
+	std::queue<int> Q;
+
+	Q.emplace(source);
+	while (!Q.empty())
+	{
+		int top = Q.front();
+		Q.pop();
+
+		visited[top] = true;
+
+		for (std::list<int>::iterator it = adjacencyList[top].begin(); it != adjacencyList[top].end(); ++it)
+		{
+			if (*it == target)
+			{
+				return true;
+			}
+			if (visited[*it] != true)
+			{
+				visited[*it] = true;
+				Q.push(*it);
+			}
+		}
+	}
 	return false;
 }
 
 int main()
 {
-	graph go(7);
+	graph go(6);
 
-	go.add_edge(1, 2);
+	go.add_edge(0, 1);
+	go.add_edge(0, 4);
+	go.add_edge(0, 5);
+
+	go.add_edge(1, 3);
 	go.add_edge(1, 4);
 
-	go.add_edge(2, 5);
+	go.add_edge(2, 1);
 
-	go.add_edge(3, 5);
-	go.add_edge(3, 6);
-
-	go.add_edge(4, 2);
-
-	go.add_edge(5, 4);
-
-	go.add_edge(6, 6);
+	go.add_edge(3, 2);
+	go.add_edge(3, 4);
 
 	go.print();
 
-	std::cout << "path exists " << std::boolalpha << go.routeBetweenNodes(6, 1) << std::endl;
+	int source = 0;
+	int target = 2;
+	std::cout << "route between nodes exists ? "
+			  << std::boolalpha
+			  << go.routeBetweenNode(source, target);
 
 	return 0;
 }
