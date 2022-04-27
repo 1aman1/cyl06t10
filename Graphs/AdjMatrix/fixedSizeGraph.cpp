@@ -18,7 +18,6 @@ public:
     bool visited[4];
     void initGraphwithFalse();
     void print();
-    bool pathFinder(int source, int target);
     graph()
     {
         initGraphwithFalse();
@@ -49,42 +48,6 @@ void graph::initGraphwithFalse()
     }
 }
 
-bool graph::pathFinder(int source, int target)
-{
-    if (visited[source] != true)
-    {
-        visited[source] = true;
-
-        DEBUG == true ? std::cout << " :checking node: " << source << std::endl : std::cout;
-
-        for (int col = 0; col < 4; ++col)
-        {
-            DEBUG == true ? std::cout << __LINE__ << " :  from: " << source << " :to: " << col << std::endl : std::cout;
-
-            if (matGraph[source][col] == true)
-            {
-                DEBUG == true ? std::cout << __LINE__ << " :   edge between:" << source << ":" << col << std::endl : std::cout;
-
-                // path exists
-                if (col == target)
-                    return true;
-
-                DEBUG == true ? std::cout << __LINE__ << ":    going to check between:" << col << ":" << target << std::endl : std::cout;
-
-                return pathFinder(col, target);
-            }
-        }
-        // path doesn't exist
-        return false;
-    }
-    else
-    { // path doesn't exist
-        if (DEBUG)
-            std::cout << " Already visited \n";
-        return false;
-    }
-}
-
 int main()
 {
     graph obj;
@@ -95,12 +58,6 @@ int main()
     obj.matGraph[3][2] = true;
 
     obj.print();
-
-    int source, target;
-    source = 0, target = 2;
-    std::cout << source << " is connected with " << target << " ? "
-              << std::boolalpha
-              << obj.pathFinder(source, target);
 
     return 0;
 }
