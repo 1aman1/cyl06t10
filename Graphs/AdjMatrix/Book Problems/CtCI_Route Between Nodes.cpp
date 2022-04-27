@@ -88,9 +88,9 @@ int main()
 
     obj.print();
 
-    int source, target;
-    source = 0, target = 2;
-    std::cout << source << " is connected with " << target << " ? "
+    int source = 0;
+    int target = 2;
+    std::cout << "route between nodes exists ? "
               << std::boolalpha
               << obj.routeBetweenNodes(source, target);
 
