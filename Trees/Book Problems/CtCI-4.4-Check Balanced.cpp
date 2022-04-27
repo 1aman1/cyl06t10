@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include<math.h>
 
 #define DEBUG false
 
@@ -15,17 +16,17 @@ not a BST,
 struct t_Node
 {
     int node_data;
-    t_Node *left;
-    t_Node *right;
+    t_Node* left;
+    t_Node* right;
     t_Node(int newdata) : node_data(newdata), left(nullptr), right(nullptr) {}
 };
 
-int maxDepth(t_Node *root)
+int maxDepth(t_Node* root)
 {
-    return root == NULL ? 0 : max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    return root == NULL ? 0 :std:: max(maxDepth(root->left), maxDepth(root->right)) + 1;
 }
 
-bool isBalanced(t_Node *root)
+bool isBalanced(t_Node* root)
 {
     if (!root)
         return true;
@@ -35,9 +36,9 @@ bool isBalanced(t_Node *root)
 
 int main()
 {
-    t_Node *testroot1 = new t_Node(1);
-    testroot1->left = new t_Node(2);
-    testroot1->left->left = new t_Node(3);
+    t_Node* testroot1 = new t_Node(4);
+    testroot1->left = new t_Node(4);
+    testroot1->left->left = new t_Node(4);
     testroot1->left->left->right = new t_Node(4);
 
     testroot1->right = new t_Node(1);
