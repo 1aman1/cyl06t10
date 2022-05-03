@@ -1,10 +1,8 @@
 #include <iostream>
 #include <algorithm>
-#include<math.h>
+#include <math.h>
 
-#define DEBUG false
-
-// WIP
+#define ERR_VALUE -99999
 
 /*
 1. find height of subtrees
@@ -13,61 +11,90 @@
 not a BST,
 
 */
-struct t_Node
+
+struct tree_node
 {
     int node_data;
-    t_Node* left;
-    t_Node* right;
-    t_Node(int newdata) : node_data(newdata), left(nullptr), right(nullptr) {}
+    tree_node *left;
+    tree_node *right;
+    tree_node(int newdata) : node_data(newdata),
+                             left(nullptr),
+                             right(nullptr) {}
 };
 
-int maxDepth(t_Node* root)
+/*
+method 1
+uses maxDepth, isBalanced
+
+O(N * log(N))
+*/
+
+int maxDepth(tree_node *root)
 {
-    return root == NULL ? 0 :std:: max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    return root == NULL ? 0 : std::max(maxDepth(root->left), maxDepth(root->right)) + 1;
 }
 
-bool isBalanced(t_Node* root)
+bool isBalanced(tree_node *root)
 {
     if (!root)
         return true;
 
-    return isBalanced(root->left) && isBalanced(root->right) && (abs(maxDepth(root->left) - maxDepth(root->right)) >= 1);
+    if (abs(maxDepth(root->left) - maxDepth(root->right)) <= 1)
+        return isBalanced(root->left) && isBalanced(root->right);
+    else
+        return false;
+}
+
+/*
+method 2
+uses checkHeight, isBalanced_2nd
+
+relatively efficient
+O(N)
+
+*/
+
+int checkHeight(tree_node *root)
+{
+    if (root == nullptr)
+        return -1;
+
+    int leftHeight = checkHeight(root->left);
+    if (leftHeight == ERR_VALUE)
+        return ERR_VALUE;
+
+    int rightHeight = checkHeight(root->right);
+    if (rightHeight == ERR_VALUE)
+        return ERR_VALUE;
+
+    int heightDifference = leftHeight - rightHeight;
+    if (std::abs(heightDifference) > 1)
+        return ERR_VALUE;
+    else
+    {
+        return std::max(leftHeight, rightHeight) + 1;
+    }
+}
+
+bool isBalanced_2nd(tree_node *root)
+{
+    return (checkHeight(root) != ERR_VALUE);
 }
 
 int main()
 {
-    t_Node* testroot1 = new t_Node(4);
-    testroot1->left = new t_Node(4);
-    testroot1->left->left = new t_Node(4);
-    testroot1->left->left->right = new t_Node(4);
+    tree_node *root = new tree_node(4);
+    root->left = new tree_node(4);
+    // root->left->right = new tree_node(4); // unbalancing node
+    root->left->left = new tree_node(4);
+    root->left->left->right = new tree_node(4);
 
-    testroot1->right = new t_Node(1);
-    testroot1->right->left = new t_Node(1);
-    testroot1->right->right = new t_Node(1);
+    root->right = new tree_node(1);
+    root->right->left = new tree_node(1);
+    root->right->right = new tree_node(1);
 
-    // std::cout << testroot1->node_data << std::endl;
-    // std::cout << testroot1->left->node_data << std::endl;
-    // std::cout << testroot1->left->left->node_data << std::endl;
+    // std::cout << "Is tree balanced ?" << std::boolalpha << isBalanced(root) << std::endl;
+    std::cout << "Is tree balanced ?" << std::boolalpha << isBalanced_2nd(root) << std::endl;
 
-    std::cout << maxDepth(testroot1) << std::endl;
-
-    /*
-        t_Node *testroot2 = new t_Node(1);
-        testroot2->left = new t_Node(2);
-        testroot2->left->left = new t_Node(3);
-
-        std::cout << testroot2->node_data << std::endl;
-        std::cout << testroot2->left->node_data << std::endl;
-        std::cout << testroot2->left->left->node_data << std::endl;
-
-        t_Node *testroot3 = new t_Node(1);
-        testroot3->left = new t_Node(2);
-        testroot3->left->left = new t_Node(3);
-
-        std::cout << testroot3->node_data << std::endl;
-        std::cout << testroot3->left->node_data << std::endl;
-        std::cout << testroot3->left->left->node_data << std::endl;
-
-    */
     return 0;
 }

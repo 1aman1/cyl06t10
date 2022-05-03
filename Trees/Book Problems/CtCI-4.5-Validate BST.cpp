@@ -1,7 +1,7 @@
 #include <iostream>
-#include <limits.h>
 
-#define DEBUG false
+#define INT_MIN -99999
+#define INT_MAX 99999
 
 struct t_Node
 {
@@ -15,12 +15,8 @@ bool validateBST(int MIN, t_Node *curr, int MAX)
 {
     if (curr)
     {
-        DEBUG == true ? std::cout << __FUNCTION__ << std::endl : std::cout;
-
         if (MIN < curr->node_data && curr->node_data < MAX)
         {
-            DEBUG == true ? std::cout << curr->node_data << " MIN < node data < MAX  " << std::endl : std::cout;
-
             return validateBST(MIN, curr->left, curr->node_data) && validateBST(curr->node_data, curr->right, MAX);
         }
         else

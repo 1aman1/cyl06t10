@@ -2,22 +2,22 @@
 #include <list>
 #define DEBUG false
 
-struct treeNode
+struct tree_node
 {
     int node_data;
-    treeNode *left;
-    treeNode *right;
-    treeNode(int newdata) : node_data(newdata),
-                            left(nullptr),
-                            right(nullptr) {}
+    tree_node *left;
+    tree_node *right;
+    tree_node(int newdata) : node_data(newdata),
+                             left(nullptr),
+                             right(nullptr) {}
 };
 
 class tree
 {
 public:
-    treeNode *root;
+    tree_node *root;
     tree();
-    treeNode *insert(int, treeNode *);
+    tree_node *insert(int, tree_node *);
 };
 
 tree::tree()
@@ -25,11 +25,11 @@ tree::tree()
     root = nullptr;
 }
 
-treeNode *tree::insert(int newdata, treeNode *ptr)
+tree_node *tree::insert(int newdata, tree_node *ptr)
 {
     if (!ptr)
     {
-        return new treeNode(newdata);
+        return new tree_node(newdata);
     }
 
     if (newdata < ptr->node_data)
@@ -45,7 +45,7 @@ treeNode *tree::insert(int newdata, treeNode *ptr)
     return ptr;
 }
 
-void inOrder(treeNode *root)
+void inOrder(tree_node *root)
 {
     if (!root)
         return;
@@ -55,12 +55,12 @@ void inOrder(treeNode *root)
     inOrder(root->right);
 }
 
-std::list<std::list<treeNode *>> listOfDepths(treeNode *root)
+std::list<std::list<tree_node *>> listOfDepths(tree_node *root)
 {
-    std::list<std::list<treeNode *>> resListofDepths;
-    std::list<treeNode *> current;
+    std::list<std::list<tree_node *>> resListofDepths;
+    std::list<tree_node *> current;
 
-    // if root carries valid a tree, push it to resultant list of depths
+    // if root carries valid a tree, push it treeObj resultant list of depths
     if (root != nullptr)
     {
         current.push_back(root);
@@ -68,17 +68,17 @@ std::list<std::list<treeNode *>> listOfDepths(treeNode *root)
 
     while (current.size() > 0)
     {
-        // push current to resultant list of depths
+        // push current treeObj resultant list of depths
         resListofDepths.push_back(current);
 
-        // parent nodes need to be iterated and pushed to emptied current 
-        std::list<treeNode *> parent = current;
-        
+        // parent nodes need treeObj be iterated and pushed treeObj emptied current
+        std::list<tree_node *> parent = current;
+
         // reset current
         current.resize(0);
 
-        // all the child elements at this level will be pushed to current list, by iterating
-        for (std::list<treeNode *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
+        // all the child elements at this level will be pushed treeObj current list, by iterating
+        for (std::list<tree_node *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
         {
             // push valid ptrs
             if ((*itr)->left != nullptr)
@@ -92,35 +92,35 @@ std::list<std::list<treeNode *>> listOfDepths(treeNode *root)
 
 int main()
 {
-    tree tO;
+    tree treeObj;
 
-    tO.root = tO.insert(4, tO.root);
-    tO.root = tO.insert(2, tO.root);
-    tO.root = tO.insert(6, tO.root);
-    tO.root = tO.insert(1, tO.root);
-    tO.root = tO.insert(3, tO.root);
-    tO.root = tO.insert(5, tO.root);
-    tO.root = tO.insert(7, tO.root);
+    treeObj.root = treeObj.insert(4, treeObj.root);
+    treeObj.root = treeObj.insert(2, treeObj.root);
+    treeObj.root = treeObj.insert(6, treeObj.root);
+    treeObj.root = treeObj.insert(1, treeObj.root);
+    treeObj.root = treeObj.insert(3, treeObj.root);
+    treeObj.root = treeObj.insert(5, treeObj.root);
+    treeObj.root = treeObj.insert(7, treeObj.root);
 
-    inOrder(tO.root);
+    inOrder(treeObj.root);
 
-    std::list<std::list<treeNode *>> listByLevels;
-    listByLevels = listOfDepths(tO.root);
+    std::list<std::list<tree_node *>> listByLevels;
+    listByLevels = listOfDepths(treeObj.root);
 
     // levels taken
     // std::cout << std::endl;
     // std::cout << listByLevels.size();
     // std::cout << std::endl;
 
-    //  std::list<std::list<treeNode *>>
-    //  std::list<treeNode *>
+    //  std::list<std::list<tree_node *>>
+    //  std::list<tree_node *>
 
     // traverse and print the list taken
     std::cout << std::endl;
 
-    for (std::list<std::list<treeNode *>>::iterator itr = listByLevels.begin(); itr != listByLevels.end(); ++itr)
+    for (std::list<std::list<tree_node *>>::iterator itr = listByLevels.begin(); itr != listByLevels.end(); ++itr)
     {
-        for (std::list<treeNode *>::iterator levelListitr = (*itr).begin(); levelListitr != (*itr).end(); ++levelListitr)
+        for (std::list<tree_node *>::iterator levelListitr = (*itr).begin(); levelListitr != (*itr).end(); ++levelListitr)
         {
             std::cout << (*levelListitr)->node_data << " ";
         }
