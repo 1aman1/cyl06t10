@@ -1,19 +1,19 @@
 #include <iostream>
 
-struct Node
+struct list_node
 {
   int data;
-  Node *next;
+  list_node *next;
 
-  Node(int x) : data(x), next(nullptr) {}
-  ~Node() {}
+  list_node(int x) : data(x), next(nullptr) {}
+  ~list_node() {}
 };
 
 class linked_list
 {
 private:
-  Node *head;
-  int SLL_size = 0;
+  list_node *head;
+  int list_size;
 
 public:
   linked_list();
@@ -23,9 +23,8 @@ public:
   bool empty();
   void print();
 
-  // function takes position (optionally) to insert, value to insert,
+  // function takes value to insert, position (optionally)
   bool insert(int, int);
-  bool insert(int);
 
   // function removes the node at given position
   bool remove(int);
@@ -33,7 +32,7 @@ public:
 
 bool linked_list::empty()
 {
-  if (SLL_size == 0)
+  if (list_size == 0)
     return true;
   else
     return false;
@@ -41,11 +40,13 @@ bool linked_list::empty()
 
 int linked_list::size()
 {
-  return SLL_size;
+  return list_size;
 }
 
-linked_list::linked_list() : head(nullptr)
+linked_list::linked_list()
 {
+  head = nullptr;
+  list_size = 0;
 }
 
 linked_list::~linked_list()
@@ -53,7 +54,7 @@ linked_list::~linked_list()
   if (!head)
     return;
 
-  Node *keepNext = head;
+  list_node *keepNext = head;
   while (!keepNext)
   {
     keepNext = head->next;
@@ -69,196 +70,183 @@ void linked_list::print()
     return;
   }
 
-  Node *printer = head;
+  list_node *printer = head;
   int index = 1;
   while (printer)
   {
-    std::cout << "pos " << index << "- " << printer->data << " :: ";
+    std::cout << "@" << index << "->" << printer->data << " :: ";
     printer = printer->next;
     index++;
   }
   std::cout << std::endl;
 }
 
-bool linked_list::insert(int value, int pos = -1)
+bool linked_list::insert(int value, int index)
 {
+  // abort case
   // position is out of bounds
-  if (pos > size() || pos < -1)
+  if (index > (size() + 1) || index < -1)
   {
     std::cout << "out of bounds\n";
     return false;
   }
-
-  // list is empty
-  if (empty())
-  {
-    // create one node,
-    head = new Node(value);
-
-    SLL_size = 1;
-    return true;
-  }
-
-  // when position 0, insert at front
-  if (pos == 0)
-  {
-    Node *temp = new Node(value);
-    temp->next = head;
-    head = temp;
-
-    SLL_size++;
-    return true;
-  }
   else
   {
-    // position is > 0 and < size()
-    int index = 0;
+    // list is empty
+    if (empty())
+    {
+      // create one node,
+      head = new list_node(value);
+
+      list_size = 1;
+      return true;
+    }
+
+    // when position 1, insert at front
+    if (index == 1)
+    {
+      list_node *temp = new list_node(value);
+      temp->next = head;
+      head = temp;
+
+      list_size++;
+      return true;
+    }
+
+    // 1 < index  <= size()
+    int pos = 1;
 
     // insert logic
 
-    Node *curr;
-    Node *prev;
+    list_node *curr;
+    list_node *prev;
 
     prev = head;
     curr = prev->next;
 
-    while (index < pos - 1)
+    while (pos < index - 1)
     {
       prev = curr;
       curr = curr->next;
-      index++;
+      pos++;
     }
-    prev->next = new Node(value);
+    prev->next = new list_node(value);
     prev->next->next = curr;
 
-    SLL_size++;
+    list_size++;
     return true;
   }
 }
 
-bool linked_list::remove(int pos)
+bool linked_list::remove(int index)
 {
+  // abort case
   // if position is negative or greater than size
-  if (pos > (size() - 1) || pos < 0)
+  if (1 > index || index > size())
   {
-    std::cout << "position invalid\n";
+    std::cout << "Out Of Bounds\n";
     return false;
   }
 
   else
-  { // position is valid
+  { // index is valid
 
-    // is pos == 0
-    if (pos == 0)
+    if (index == 1)
     {
-      Node *temp = head;
+      list_node *temp = head;
       head = head->next;
 
       delete temp;
-      SLL_size--;
+      list_size--;
 
       return true;
     }
 
-    else
+    int counter = 1;
+    list_node *prev = head;
+    list_node *curr = prev->next;
+
+    // curr is already one step ahead , so we need to exit the loop one step early
+    while (counter < index - 1)
     {
-      int index = 0;
-      Node *curr = head;
-      Node *NEXT = curr->next;
-
-      while (index < pos - 1)
-      {
-        ++index;
-        curr = NEXT;
-        NEXT = NEXT->next;
-      }
-      curr->next = NEXT->next;
-
-      delete NEXT;
-
-      SLL_size--;
-      return true;
+      prev = curr;
+      curr = curr->next;
+      ++counter;
     }
-  }
-}
+    prev->next = curr->next;
 
-/*
-void insertMod(linked_list &mylist, int value, int pos = -1)
-{
-  if (mylist.insert(value, pos))
-    std::cout << "insert Success\n";
-  else
-    std::cout << "insert failed\n";
-}
-*/
-void removeMod(linked_list &mylist, int pos)
-{
-  if (mylist.remove(pos))
-    std::cout << "Remove Success\n";
-  else
-    std::cout << "Remove failed\n";
+    delete curr;
+
+    list_size--;
+    return true;
+  }
 }
 
 int main()
 {
-
-  linked_list mylist;
+  linked_list list_obj;
 
   int choice = 1, input;
+
+  std::cout << "This Singly Linked list is 1 indexed\n";
+
   while (choice)
   {
-    std::cout << "1 : insert   "
-              << "2 : print "
-              << "3 : remove--- > ";
+    std::cout << "\n1: insert  "
+              << "2: print "
+              << "3: remove--- > ";
     std::cin >> input;
+    std::cout << std::endl;
 
     switch (input)
     {
 
     case 1:
     {
-      int value, pos, locationChoice = 0;
-      std::cout << "input value -> ";
+      int value, index;
+      std::cout << "insert value -> ";
       std::cin >> value;
-      std::cout << "Want to insert at specific location ? -1 is no";
-      std::cin >> locationChoice;
+      std::cout << "BY DEFAULT insert at front OR input index to insert? -1 is a No\n";
+      std::cin >> index;
 
-      if (locationChoice != -1)
+      if (index == -1) // insert at front
       {
-        std::cout << "input position -> ";
-        std::cin >> pos;
-        std::cout << std::boolalpha << mylist.insert(pos, value);
+        std::cout << std::boolalpha << list_obj.insert(value, 1) << std::endl;
       }
       else
       {
-        std::cout << mylist.insert(value);
+        std::cout << std::boolalpha << list_obj.insert(value, index) << std::endl;
       }
+
       break;
     }
 
     case 2:
     {
-      mylist.print();
+      list_obj.print();
       break;
     }
 
     case 3:
-    {
-      if (mylist.empty())
+    { // remove case
+      int index;
+      std::cout << "BY DEFAULT remove at front OR input index to remove? -1 is a No\n";
+      std::cin >> index;
+
+      if (index == -1) // remove at front
       {
-        std::cout << "list already empty";
+        std::cout << std::boolalpha << list_obj.remove(1) << std::endl;
       }
       else
       {
-        std::cout << "input position  -->";
-        int pos;
-        std::cin >> pos;
-        removeMod(mylist, pos);
+        std::cout << std::boolalpha << list_obj.remove(index) << std::endl;
       }
     }
     }
-    std::cout << "continue ?";
-    std::cin >> choice;
+
+    // std::cout << "\ncontinue ?";
+    // std::cin >> choice;
+    choice = 1;
   }
 
   return 0;
