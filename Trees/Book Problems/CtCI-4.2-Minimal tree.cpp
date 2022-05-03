@@ -1,5 +1,7 @@
 #include <iostream>
 
+#define DEBUG false
+
 struct tree_node
 {
     int node_data;
@@ -16,6 +18,7 @@ public:
     tree_node *root;
     tree();
     tree_node *insert(int, tree_node *);
+    void inOrder(tree_node *);
 };
 
 tree::tree()
@@ -43,17 +46,37 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
     return ptr;
 }
 
+void insertInSeq(tree &treeObj, int arr[], int left, int right)
+{
+    if (right >= left)
+    {
+        int mid = (right - left) / 2 + left;
+        std::cout << arr[mid] << std::endl;
+        treeObj.root = treeObj.insert(arr[mid], treeObj.root);
+
+        insertInSeq(treeObj, arr, left, mid - 1);
+        insertInSeq(treeObj, arr, mid + 1, right);
+    }
+    return;
+}
+
+void tree::inOrder(tree_node *ptr)
+{
+    if (!ptr)
+        return;
+
+    inOrder(ptr->left);
+    std::cout << ptr->node_data << std::endl;
+    inOrder(ptr->right);
+}
+
 int main()
 {
-    tree obj;
+    tree treeObj;
+    int arr[7] = {1, 2, 3, 4, 5, 6, 7};
 
-    obj.root = obj.insert(2, obj.root);
-    obj.root = obj.insert(1, obj.root);
-    obj.root = obj.insert(3, obj.root);
-
-    std::cout << obj.root->node_data << std::endl;
-    std::cout << obj.root->left->node_data << std::endl;
-    std::cout << obj.root->right->node_data << std::endl;
+    insertInSeq(treeObj, arr, 0, 6);
+    treeObj.inOrder(treeObj.root);
 
     return 0;
 }
