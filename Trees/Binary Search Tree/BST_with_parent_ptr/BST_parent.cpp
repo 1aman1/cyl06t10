@@ -29,6 +29,9 @@ public:
     tree() : root(nullptr){};
 
     tree_node *insert(int, tree_node *);
+    tree_node *remove(int, tree_node *);
+
+    tree_node *findSmallest(tree_node *currPtr);
 
     // view
     void DepthView(tree_node *);
@@ -45,7 +48,9 @@ void tree::DepthView(tree_node *currPtr)
     {
         for (std::list<tree_node *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
-            std::cout << (*nestItr)->node_data << " ";
+            std::cout << (*nestItr)->node_data;
+            // if ((*nestItr)->parent != nullptr)
+            // std::cout << "^parent" << (*nestItr)->parent->node_data << " ";
         }
         std::cout << std::endl;
     }
@@ -109,6 +114,72 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
     return ptr;
 }
 
+tree_node *tree::findSmallest(tree_node *currPtr)
+{
+    // validation for currPtr deals with nullptr also
+    while (currPtr && currPtr->left)
+        currPtr = currPtr->left;
+
+    return currPtr;
+}
+
+tree_node *tree::remove(int item, tree_node *currPtr)
+{
+    // if it is null
+    if (currPtr == nullptr)
+        return currPtr;
+
+    // if value to delete is less than current node's value, go left
+    else if (item < currPtr->node_data)
+        currPtr->left = remove(item, currPtr->left);
+
+    // if value to delete is greater than current node's value, go right
+    else if (item > currPtr->node_data)
+        currPtr->right = remove(item, currPtr->right);
+
+    // if no condition matches, then
+    // it is the currPtr that has to be deleted
+    else
+    {
+        // a leaf node
+        if (currPtr->left == nullptr && currPtr->right == nullptr)
+        {
+            delete currPtr;
+            return nullptr;
+        }
+
+        // node with a left subtree
+        else if (currPtr->left != nullptr && currPtr->right == nullptr)
+        {
+            tree_node *ptrToLeftSubtree = currPtr->left;
+            delete currPtr;
+            return ptrToLeftSubtree;
+        }
+
+        // node with a right subtree
+        else if (currPtr->left == nullptr && currPtr->right != nullptr)
+        {
+            tree_node *ptrToRightSubtree = currPtr->right;
+            delete currPtr;
+            return ptrToRightSubtree;
+        }
+
+        // node with left subtree and right subtree
+        else
+        {
+            // finMin in right subtree
+            tree_node *minNode = findSmallest(currPtr->right);
+
+            // copy its data
+            currPtr->node_data = minNode->node_data;
+
+            // lastly call minNode deletion in its subtree
+            currPtr->right = remove(minNode->node_data, currPtr->right);
+        }
+    }
+    return currPtr;
+}
+
 int main()
 {
     std::cout << __FILE__ << std::endl;
@@ -122,6 +193,12 @@ int main()
     obj.root = obj.insert(6, obj.root);
     obj.root = obj.insert(2, obj.root);
     obj.root = obj.insert(8, obj.root);
+
+    std::cout << std::endl;
+    obj.DepthView(obj.root);
+    std::cout << std::endl;
+
+    obj.remove(3, obj.root);
 
     std::cout << std::endl;
     obj.DepthView(obj.root);

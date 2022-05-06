@@ -119,7 +119,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
             currPtr->node_data = minNode->node_data;
 
             // lastly call minNode deletion in its subtree
-            currPtr->right = remove(item, currPtr->right);
+            currPtr->right = remove(minNode->node_data, currPtr->right);
         }
     }
     return currPtr;
