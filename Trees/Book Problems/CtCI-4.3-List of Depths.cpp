@@ -60,7 +60,7 @@ std::list<std::list<tree_node *>> listOfDepths(tree_node *root)
     std::list<std::list<tree_node *>> resListofDepths;
     std::list<tree_node *> current;
 
-    // if root carries valid a tree, push it treeObj resultant list of depths
+    // if root ptr carries valid a tree, push it
     if (root != nullptr)
     {
         current.push_back(root);
