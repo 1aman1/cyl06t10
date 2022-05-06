@@ -1,4 +1,12 @@
 #include <iostream>
+/*
+augmentation over Singly Linked list
+It has two pointers instead of one i.e.,
+Head & Tail, both.
+
+which reduces end of the list operation complexity to O(1) from O(N)
+N->number of elements
+*/
 
 struct list_node
 {
@@ -13,6 +21,7 @@ class linked_list
 {
 private:
   list_node *head;
+  list_node *tail;
   int list_size;
 
 public:
@@ -46,6 +55,7 @@ int linked_list::size()
 linked_list::linked_list()
 {
   head = nullptr;
+  tail = nullptr;
   list_size = 0;
 }
 
@@ -97,26 +107,40 @@ bool linked_list::insert(int value, int index)
     {
       // create one node,
       head = new list_node(value);
+      // update tail
+      tail = head;
 
       list_size = 1;
       return true;
     }
 
-    // when position 1, insert at front
+    // insert at front
     if (index == 1)
     {
       list_node *temp = new list_node(value);
       temp->next = head;
       head = temp;
 
+      // tail also need to be updated if list size is 1
+      // if (size() == 1)
+      // tail = head;
+
       list_size++;
       return true;
     }
 
-    // 1 < index  <= size()
-    int pos = 1;
+    // insert at end
+    if (index == size() + 1)
+    {
+      tail->next = new list_node(value);
+      tail = tail->next;
 
-    // insert logic
+      list_size++;
+      return true;
+    }
+
+    // insert within bounds
+    int pos = 1;
 
     list_node *curr;
     list_node *prev;
@@ -142,7 +166,7 @@ bool linked_list::remove(int index)
 {
   // abort case
   // if position is negative or greater than size
-  if (1 > index || index > size())
+  if (0 > index || index > size())
   {
     std::cout << "Out Of Bounds\n";
     return false;
@@ -159,6 +183,10 @@ bool linked_list::remove(int index)
       delete temp;
       list_size--;
 
+      // if list is empty now
+      if (list_size == 0)
+        tail = head;
+
       return true;
     }
 
@@ -173,6 +201,12 @@ bool linked_list::remove(int index)
       curr = curr->next;
       ++counter;
     }
+
+    if (index == size())
+    {
+      tail = prev;
+    }
+
     prev->next = curr->next;
 
     delete curr;
@@ -188,7 +222,7 @@ int main()
 
   int choice = 1, input;
 
-  std::cout << "This Singly Linked list is 1 indexed\n";
+  std::cout << "This Doubly Ended Linked list is 1 indexed\n";
 
   while (choice)
   {

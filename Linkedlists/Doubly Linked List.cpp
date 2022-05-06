@@ -1,11 +1,19 @@
 #include <iostream>
+#define DEBUG true
+/*
+It has one more member in list_node i.e.,
+prev pointer alongwith legacy next pointer
+*/
 
 struct list_node
 {
   int data;
   list_node *next;
+  list_node *prev;
 
-  list_node(int x) : data(x), next(nullptr) {}
+  list_node(int x) : data(x),
+                     next(nullptr),
+                     prev(nullptr) {}
   ~list_node() {}
 };
 
@@ -22,6 +30,8 @@ public:
   int size();
   bool empty();
   void print();
+  // DLL can print rev using prev
+  void printRev();
 
   // function takes value to insert, position (optionally)
   bool insert(int, int);
@@ -81,6 +91,31 @@ void linked_list::print()
   std::cout << std::endl;
 }
 
+void linked_list::printRev()
+{
+  if (empty())
+  {
+    std::cout << "list empty\n";
+    return;
+  }
+
+  list_node *printer = head;
+  int index = 1;
+  while (printer->next != nullptr)
+  {
+    index++;
+    printer = printer->next;
+  }
+
+  while (printer)
+  {
+    std::cout << "@" << index << "->" << printer->data << " :: ";
+    printer = printer->prev;
+    index--;
+  }
+  std::cout << std::endl;
+}
+
 bool linked_list::insert(int value, int index)
 {
   // abort case
@@ -107,6 +142,7 @@ bool linked_list::insert(int value, int index)
     {
       list_node *temp = new list_node(value);
       temp->next = head;
+      head->prev = temp;
       head = temp;
 
       list_size++;
@@ -114,24 +150,20 @@ bool linked_list::insert(int value, int index)
     }
 
     // 1 < index  <= size()
+
+    list_node *curr = head;
     int pos = 1;
-
-    // insert logic
-
-    list_node *curr;
-    list_node *prev;
-
-    prev = head;
-    curr = prev->next;
 
     while (pos < index - 1)
     {
-      prev = curr;
       curr = curr->next;
       pos++;
     }
-    prev->next = new list_node(value);
-    prev->next->next = curr;
+
+    list_node *newNode = new list_node(value);
+    newNode->next = curr->next;
+    curr->next = newNode;
+    newNode->prev = curr;
 
     list_size++;
     return true;
@@ -155,6 +187,7 @@ bool linked_list::remove(int index)
     {
       list_node *temp = head;
       head = head->next;
+      temp->next->prev = nullptr;
 
       delete temp;
       list_size--;
@@ -163,17 +196,19 @@ bool linked_list::remove(int index)
     }
 
     int counter = 1;
-    list_node *prev = head;
-    list_node *curr = prev->next;
+    list_node *curr = head;
 
-    // curr is already one step ahead , so we need to exit the loop one step early
-    while (counter < index - 1)
+    while (counter < index)
     {
-      prev = curr;
       curr = curr->next;
       ++counter;
     }
-    prev->next = curr->next;
+
+    DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
+    curr->prev->next = curr->next;
+    DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
+    if (curr->next != nullptr)
+      curr->next->prev = curr->prev;
 
     delete curr;
 
@@ -188,7 +223,7 @@ int main()
 
   int choice = 1, input;
 
-  std::cout << "This Singly Linked list is 1 indexed\n";
+  std::cout << "This Doubly Linked list is 1 indexed\n";
 
   while (choice)
   {
@@ -224,6 +259,8 @@ int main()
     case 2:
     {
       list_obj.print();
+      std::cout << "\nReverse Order";
+      list_obj.printRev();
       break;
     }
 
