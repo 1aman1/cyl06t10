@@ -1,2 +1,2 @@
 # Linkedlists
-Find implementations for a linkedlist problem or a complete linked list program also.
+Find implementations for linkedlist problems and a complete linked list implementation also.
