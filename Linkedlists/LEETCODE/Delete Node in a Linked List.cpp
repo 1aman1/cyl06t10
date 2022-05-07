@@ -6,9 +6,11 @@
  };
 //*/
 
-class Solution {
+class Solution
+{
 public:
-    void deleteNode(ListNode* node) {
+    void deleteNode(ListNode *node)
+    {
         /*
         node to be deleted in not the tail node is CRUCIAL for the below method to work
 
@@ -17,21 +19,22 @@ public:
         3. delete the next node
         */
 
-       ListNode *currNode = node, *NextNode = nullptr;
-       
-       // 1.
-       currNode->val = currNode->next->val;
+        ListNode *currNode = node, *NextNode = nullptr;
 
-       // 2.
-       NextNode = currNode->next;
-       if ( NextNode->next == nullptr ) {
-           currNode->next = nullptr;
+        // 1.
+        currNode->val = currNode->next->val;
 
-       }
-       else {
-           currNode->next = NextNode->next ;
-       } 
-       
-       delete NextNode;
+        // 2.
+        NextNode = currNode->next;
+        if (NextNode->next == nullptr)
+        {
+            currNode->next = nullptr;
+        }
+        else
+        {
+            currNode->next = NextNode->next;
+        }
+
+        delete NextNode;
     }
 };
