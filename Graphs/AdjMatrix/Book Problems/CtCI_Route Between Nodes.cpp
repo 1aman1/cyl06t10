@@ -3,7 +3,7 @@ This graph uses fixed size matrix
 
 #implements:
 
->function() pathFinder
+>function() routeBetweenNodes
 -> checks if path exists from one node to the other
 */
 #include <iostream>
@@ -18,6 +18,7 @@ public:
     bool visited[4];
     void initGraphwithFalse();
     void print();
+    bool routeBetweenNodes(int source, int target);
     graph()
     {
         initGraphwithFalse();
@@ -48,6 +49,34 @@ void graph::initGraphwithFalse()
     }
 }
 
+bool graph::routeBetweenNodes(int source, int target)
+{
+    if (source == target)
+        return true;
+    if (visited[source] != true)
+    {
+        visited[source] = true;
+
+        for (int col = 0; col < 4; ++col)
+        {
+            if (matGraph[source][col] == true)
+            {
+                // path exists
+                if (col == target)
+                    return true;
+
+                return routeBetweenNodes(col, target);
+            }
+        }
+        // path doesn't exist
+        return false;
+    }
+    else
+    { // path doesn't exist
+        return false;
+    }
+}
+
 int main()
 {
     graph obj;
@@ -58,6 +87,12 @@ int main()
     obj.matGraph[3][2] = true;
 
     obj.print();
+
+    int source = 0;
+    int target = 2;
+    std::cout << "route between nodes exists ? "
+              << std::boolalpha
+              << obj.routeBetweenNodes(source, target);
 
     return 0;
 }
