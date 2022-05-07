@@ -1,6 +1,6 @@
 # Stacks
 
-Find implementations for a stack problem or a complete stack program also.
+Find implementations for stack problems and complete stack solution also.
 
 
 # to do
