@@ -15,8 +15,8 @@ struct adjListNode
 
 int main()
 {
-    std::vector<adjListNode *> AdjacencyList;
     // AdjacencyList
+    std::vector<adjListNode *> AdjacencyList;
 
     AdjacencyList.push_back(new adjListNode(0));
     AdjacencyList.push_back(new adjListNode(1));
