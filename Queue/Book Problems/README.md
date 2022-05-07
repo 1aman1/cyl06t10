@@ -2,6 +2,6 @@
 
 CtCI - Cracking the Coding Interview
 
-TBA
+TBAdded
 
-CLRS - cormen 
+CLRS - cormen leiserson
