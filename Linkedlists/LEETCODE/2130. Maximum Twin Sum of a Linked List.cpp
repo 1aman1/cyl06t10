@@ -45,10 +45,7 @@ public:
 
     ListNode *reverseList(ListNode *head)
     {
-        if (head == nullptr)
-            return head;
-
-        if (head->next == nullptr)
+        if (head == nullptr || head->next == nullptr)
             return head;
 
         // reverse the list here
