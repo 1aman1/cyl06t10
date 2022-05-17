@@ -1,65 +1,86 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 
-#define DEBUG true
+#define DEBUG false
 
 class Solution
 {
 public:
+    char getMostFreqChar(const std::vector<int> &counter)
+    {
+        char MostFreqChar;
+        int max_freq = -1;
+
+        for (int i = 0; i < 26; i++)
+        {
+            if (max_freq < counter[i])
+            {
+                max_freq = counter[i];
+                MostFreqChar = 'a' + i;
+            }
+        }
+        return MostFreqChar;
+    }
+
     std::string reorganizeString(std::string s)
     {
-        // check all permutations,
-        // solution needs atleast one string possible,
-        // if NONE, return "", empty string.
+        int strLength = s.size();
 
-        // std::string resStr = s;
-        std::sort(s.begin(), s.end());
-
-        bool hasAdjacentSameCharacters = false;
-        do
-        { // for each permutation, test adjacent values to be different
-            DEBUG == true ? std::cout << "NEW STRING " << s << std::endl : std::cout << "";
-
-            for (int i = 0; i < s.length() - 1; ++i)
-            {
-                {
-                    DEBUG == true ? std::cout << s[i] << "-" << s[i + 1] << std::endl : std::cout << "";
-                    //  if not same, keep checking till end
-                    if (s[i] != s[i + 1])
-                    {
-                        DEBUG == true ? std::cout << "CHECK" << std::endl : std::cout << "";
-                        hasAdjacentSameCharacters = false;
-                        continue;
-                    }
-                    else
-                    {
-                        DEBUG == true ? std::cout << "REJECTED" << std::endl : std::cout << "";
-                        //  if the string has adjacent same characters atleast one time
-                        //  then this permutation doesn't qualify
-                        hasAdjacentSameCharacters = true;
-                        break;
-                        // and test the next permutation
-                    }
-                }
-            }
-
-        } while (hasAdjacentSameCharacters && std::next_permutation(s.begin(), s.end()));
-
-        if (hasAdjacentSameCharacters == false)
-            return s;
-        else
+        if (strLength < 1)
             return "";
+
+        std::vector<int> counter(26, 0);
+        // get frequencies loaded
+        for (auto currChar : s)
+        {
+            ++counter[currChar - 'a'];
+        }
+
+        // find mostFreqChar & its frequency
+        char mostFreqChar = getMostFreqChar(counter);
+        int freqOfMostFreqChar = counter[mostFreqChar - 'a'];
+
+        // check if reorganizeString possible by spreading mostfreq char one index apart from each other.
+        if (freqOfMostFreqChar > (strLength + 1) / 2)
+            return "";
+
+        // else
+        int fillerIndex = 0;
+        std::string solutionString(strLength, ' ');
+
+        while (freqOfMostFreqChar > 0)
+        {
+            solutionString[fillerIndex] = mostFreqChar;
+            fillerIndex += 2;
+            --freqOfMostFreqChar;
+        }
+        // most freq char would get exhausted now.
+        counter[mostFreqChar - 'a'] = 0;
+
+        for (int i = 0; i < counter.size(); ++i)
+        {
+            while (counter[i] > 0)
+            { // while the curr element has appearances
+                fillerIndex = (fillerIndex >= strLength) ? 1 : fillerIndex;
+                solutionString[fillerIndex] = 'a' + i;
+                fillerIndex += 2;
+                --counter[i];
+            }
+        }
+        return solutionString;
     }
 };
 
 int main()
 {
     Solution obj;
-    std::string s = "aab";
+    std::string s = "aaab";
 
     std::string res = obj.reorganizeString(s);
-
-    std::cout << "Result :" << res << std::endl;
+    if (res.empty())
+        std::cout << "reorganizeString not possible\n";
+    else
+        std::cout << "Result :" << res << std::endl;
 
     return 0;
 }
