@@ -53,10 +53,12 @@ bool is_permutation_a_palindrome_BETA(std::string str)
 
     for (int i = 0; i < str.length(); ++i)
     {
+        if (str[i] == ' ')
+            continue;
         ++oddOccurrences;
         if (freqOfStrCharacters[str[i] - 'a'] == true)
             oddOccurrences -= 2;
-            
+
         if (str[i] != ' ')
             freqOfStrCharacters[str[i] - 'a'] = !freqOfStrCharacters[str[i] - 'a'];
     }
@@ -85,7 +87,7 @@ bool is_permutation_a_palindrome_BETA(std::string str)
 int main()
 {
     // INPUT SEC
-    std::string str1 = "kayak";
+    std::string str1 = "was it a car or a cat i saw";
     std::string str2 = "kayakr";
 
     std::cout << std::boolalpha
