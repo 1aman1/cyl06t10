@@ -1,27 +1,44 @@
 #include <iostream>
-#include <string>
-std::string URLify(std::string Str)
+
+std::string URLify(std::string Str, int trueLength)
 {
-    for (int i = 0; i < Str.length(); ++i)
+    int spaceCount = 0;
+
+    // count string for ' ' spaces
+    for (int i = 0; i < trueLength; ++i)
+    {
+        if (Str[i] == ' ')
+            ++spaceCount;
+    }
+
+    int fillerIndex = trueLength - spaceCount + spaceCount * 3;
+    for (int i = trueLength - 1; i >= 0; --i)
     {
         if (Str[i] == ' ')
         {
-            Str = Str.substr(0, i) + "%20" + Str.substr(i + 1, Str.length());
+            Str[fillerIndex - 0 - 1] = '0';
+            Str[fillerIndex - 1 - 1] = '2';
+            Str[fillerIndex - 2 - 1] = '%';
+            fillerIndex -= 3;
+        }
+        else
+        {
+            Str[fillerIndex - 1] = Str[i];
+            --fillerIndex;
         }
     }
+
     return Str;
 }
 
 int main()
 {
-
-    std::string str1 = "str in gs";
-    std::string str2 = " gnistrs ";
+    // INPUT SEC
+    std::string str1 = "Mr John Smith    ";
+    int trueLength = 13;
 
     std::cout << std::boolalpha
-              << URLify(str1) << std::endl
-              << URLify(str2) << std::endl
-              << std::endl;
+              << URLify(str1, trueLength) << std::endl;
 
     return 0;
 }
