@@ -2,7 +2,7 @@
 
 ***
 
-<img src='https://github.com/1aman1/cyl06t10/blob/mastercodebase/git%20sketch%20themed.png'>
+<img src='https://github.com/1aman1/cyl06t10/blob/mastercodebase/utils/git%20sketches.png'>
 
 find my First hand Data structure implementations from scratch, including the problem/solutions from diff platforms and books.
 
