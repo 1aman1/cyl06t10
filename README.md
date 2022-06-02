@@ -12,7 +12,7 @@ A. Content Structure of each directory
    * Book Problems
    * LEETCODE
    * More platforms like LEETCODE
-   * Self learning & then some implementations. 
+   * Self learning & with implementations. 
    
 B. Data Structures
    * Array
