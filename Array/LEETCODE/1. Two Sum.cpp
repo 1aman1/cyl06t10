@@ -40,6 +40,7 @@ public:
 
 // O(n^2)
 // Space(1)
+// 520 ms
 const std::vector<int> Solution::twoSum_solution1(int item)
 {
     for (int i = 0; i < array.size(); ++i)
@@ -47,7 +48,7 @@ const std::vector<int> Solution::twoSum_solution1(int item)
         for (int j = i + 1; j < array.size(); ++j)
         {
             if (array[i] + array[j] == item)
-                return {i + 1, j + 1};
+                return {i, j};
         }
     }
     return {};
@@ -55,6 +56,7 @@ const std::vector<int> Solution::twoSum_solution1(int item)
 
 // O(n)
 // Space(n)
+// 19ms
 const std::vector<int> Solution::twoSum_solution2(int item)
 {
     // store value with it's index
@@ -64,7 +66,7 @@ const std::vector<int> Solution::twoSum_solution2(int item)
         int leftover = item - array[i];
         if (lookup.find(leftover) != lookup.end())
         {
-            return {lookup.at(leftover)+1, i+1};
+            return {lookup.at(leftover), i};
         }
         lookup.insert({array[i], i});
     }
