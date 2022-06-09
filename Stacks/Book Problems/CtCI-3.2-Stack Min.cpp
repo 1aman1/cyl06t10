@@ -4,7 +4,7 @@
 struct stackNode
 {
 public:
-    stackNode() : min(-100001){};
+    stackNode() : min(100001){};
     int data;
     int min;
 };
@@ -62,10 +62,21 @@ int stack::size()
 
 void stack::push(int newData)
 {
-    stackNode tmpNode;
-    tmpNode.data = newData;
-    tmpNode.min < newData ? tmpNode.min = newData : tmpNode.min;
-    stackVec.push_back(tmpNode);
+    stackNode newNode;
+    newNode.data = newData;
+    newNode.min = newData;
+
+    // now compare if existing top min is smaller or not
+    if (!empty())
+    {
+        int stackTopMin = stackVec.back().min;
+        if (newData > stackTopMin)
+        {
+            newNode.min = stackTopMin;
+        }
+    }
+
+    stackVec.push_back(newNode);
 }
 
 void stack::pop()
@@ -87,7 +98,8 @@ int main()
               << "3: pop "
               << "4: empty "
               << "5: size "
-              << "6: min \n";
+              << "6: min "
+              << "0: exit \n";
 
     while (choice)
     {
@@ -147,7 +159,7 @@ int main()
             break;
         }
         }
-
+        // choice = 1;
         std::cout << "continue ? ";
         std::cin >> choice;
     }
