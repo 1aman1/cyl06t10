@@ -1,41 +1,46 @@
 #include <iostream>
 #include <vector>
 
-int countSubArrays(const std::vector<int> &array, const int &k)
+class Solution
 {
-    std::vector<int> kMod(k, 0);
-
-    int cumulativeSum = 0;
-    for (int i = 0; i < array.size(); ++i)
+public:
+    int subarraysDivByK(std::vector<int> &nums, int k)
     {
-        cumulativeSum += array[i];
-        int tmp;
-        tmp = cumulativeSum % k;
-        // tmp = ((cumulativeSum % k) + k) % k;
+        std::vector<int> kMod(k, 0);
 
-        ++kMod[tmp];
-    }
-
-    int count = 0;
-    for (int i = 0; i < k; ++i)
-    {
-        if (kMod[i] > 1)
+        int cumulativeSum = 0;
+        for (int i = 0; i < nums.size(); ++i)
         {
-            count += (kMod[i] * (kMod[i] - 1)) / 2;
-        }
-    }
-    count += kMod[0];
+            cumulativeSum += nums[i];
+            int tmp;
+            tmp = cumulativeSum % k;
+            // tmp = ((cumulativeSum % k) + k) % k;
 
-    return count;
-}
+            ++kMod[tmp];
+        }
+
+        int count = 0;
+        for (int i = 0; i < k; ++i)
+        {
+            if (kMod[i] > 1)
+            {
+                count += (kMod[i] * (kMod[i] - 1)) / 2;
+            }
+        }
+        count += kMod[0];
+
+        return count;
+    }
+};
 
 int main()
 {
 
-    std::vector<int> array = {4, 5, 0, -2, -3, 1};
+    std::vector<int> nums = {4, 5, 0, -2, -3, 1};
     int k = 5;
 
-    std::cout << countSubArrays(array, k);
+    Solution obj;
+    std::cout << obj.subarraysDivByK(nums, k);
 
     return 0;
 }
