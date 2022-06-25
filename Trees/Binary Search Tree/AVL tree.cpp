@@ -416,5 +416,3 @@ int main()
 
     return 0;
 }
-
-//  credits: Adelson-Velskii and Landis

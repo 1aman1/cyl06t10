@@ -20,6 +20,7 @@ struct node_t
 // BST interface
 class BSTree_t
 {
+
 public:
     BSTree_t();
     void insert(int);
@@ -27,12 +28,12 @@ public:
     void DepthView();
     node_t *findSmallest(node_t *);
 
-    int maxDepth();
+    int height();
 
 private:
     node_t *root;
 
-    int maxDepthUtility(node_t *);
+    int heightUtility(node_t *);
 
     virtual node_t *insertUtility(int, node_t *);
     virtual node_t *removeUtility(int, node_t *);
@@ -41,16 +42,19 @@ private:
 
 BSTree_t::BSTree_t() : root(nullptr) {}
 
-int BSTree_t::maxDepthUtility(node_t *root)
+int BSTree_t::heightUtility(node_t *curr_ptr)
 {
+    if (!curr_ptr)
+        return 0;
+    int left = heightUtility(curr_ptr->left);
+    int right = heightUtility(curr_ptr->right);
 
-    return root == NULL ? 0 : std::max(maxDepthUtility(root->left), maxDepthUtility(root->right)) + 1;
+    return (left > right ? left : right) + 1;
 }
 
-int BSTree_t::maxDepth()
+int BSTree_t::height()
 {
-
-    return maxDepthUtility(root);
+    return heightUtility(root);
 }
 
 /*--------------------------------------------- Insert Element into the tree */
@@ -215,34 +219,27 @@ int main()
     obj.insert(7);
     obj.DepthView();
 
-    std::cout << "max depth:" << obj.maxDepth()
-              << std::endl;
+    std::cout << "height :" << obj.height() << std::endl;
 
     obj.insert(5);
     obj.DepthView();
 
-    std::cout << "max depth:" << obj.maxDepth()
-              << std::endl;
+    std::cout << "height :" << obj.height() << std::endl;
 
     obj.insert(3);
     obj.DepthView();
 
-    std::cout << "max depth:" << obj.maxDepth()
-              << std::endl;
+    std::cout << "height :" << obj.height() << std::endl;
 
     // REMOVE & BALANCE TEST
 
     obj.insert(1);
     obj.DepthView();
 
-    std::cout << "max depth:" << obj.maxDepth()
-              << std::endl;
-
     obj.remove(7);
     obj.DepthView();
 
-    std::cout << "max depth:" << obj.maxDepth()
-              << std::endl;
+    std::cout << "height :" << obj.height() << std::endl;
 
     return 0;
 }
