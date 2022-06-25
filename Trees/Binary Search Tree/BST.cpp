@@ -6,61 +6,62 @@
 node has data, left child, right child.
 */
 
-struct tree_node
+struct node_t
 {
     int node_data;
-    tree_node *left;
-    tree_node *right;
-    tree_node(int newdata) : node_data(newdata),
-                             left(nullptr),
-                             right(nullptr) {}
+    node_t *left;
+    node_t *right;
+    node_t(int newdata) : node_data(newdata),
+                          left(nullptr),
+                          right(nullptr) {}
 };
 
-class tree
+class BSTree_t
 {
 public:
-    tree_node *root;
-    tree();
+    node_t *root;
+    BSTree_t();
 
 public:
-    tree_node *insert(int, tree_node *);
-    tree_node *remove(int, tree_node *);
+    node_t *insert(int, node_t *);
+    node_t *remove(int, node_t *);
 
     // utility
-    tree_node *findSmallest(tree_node *);
+    node_t *findSmallest(node_t *);
 
     // view
-    void DepthView(tree_node *);
-    std::list<std::list<tree_node *>> DepthViewUtility(tree_node *);
+    void DepthView(node_t *);
+    std::list<std::list<node_t *>> DepthViewUtility(node_t *);
 };
 
-tree::tree()
+BSTree_t::BSTree_t()
 {
     root = nullptr;
 }
 
-tree_node *tree::findSmallest(tree_node *currPtr)
-{
-    // validation for currPtr deals with nullptr also
-    while (currPtr && currPtr->left)
+node_t *BSTree_t::findSmallest(node_t *currPtr)
+{ // takes a left pointer for any node, to traverse down the left subtree recursively
+
+    while (currPtr && currPtr->left) // validation for currPtr deals with nullptr also
         currPtr = currPtr->left;
 
     return currPtr;
 }
 
-tree_node *tree::insert(int newdata, tree_node *ptr)
+node_t *BSTree_t::insert(int newdata, node_t *ptr)
 {
-    if (!ptr)
+    if (!ptr) // no node present, create a new and return
     {
-        return new tree_node(newdata);
+        return new node_t(newdata);
     }
 
+    // go to left subtree
     if (newdata < ptr->node_data)
     {
         ptr->left = insert(newdata, ptr->left);
     }
 
-    else //(newdata > ptr->node_data)
+    else //(newdata > ptr->node_data) // go to right subtree
     {
         ptr->right = insert(newdata, ptr->right);
     }
@@ -68,17 +69,17 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
     return ptr;
 }
 
-tree_node *tree::remove(int item, tree_node *currPtr)
+node_t *BSTree_t::remove(int item, node_t *currPtr)
 {
-    // if it is null
+    // if currPtr is null
     if (currPtr == nullptr)
         return currPtr;
 
-    // if value to delete is less than current node's value, go left
+    // if delete node has less than current node's value, go left
     else if (item < currPtr->node_data)
         currPtr->left = remove(item, currPtr->left);
 
-    // if value to delete is greater than current node's value, go right
+    // if  delete node has greater than current node's value, go right
     else if (item > currPtr->node_data)
         currPtr->right = remove(item, currPtr->right);
 
@@ -96,7 +97,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         // node with a left subtree
         else if (currPtr->left != nullptr && currPtr->right == nullptr)
         {
-            tree_node *ptrToLeftSubtree = currPtr->left;
+            node_t *ptrToLeftSubtree = currPtr->left;
             delete currPtr;
             return ptrToLeftSubtree;
         }
@@ -104,7 +105,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         // node with a right subtree
         else if (currPtr->left == nullptr && currPtr->right != nullptr)
         {
-            tree_node *ptrToRightSubtree = currPtr->right;
+            node_t *ptrToRightSubtree = currPtr->right;
             delete currPtr;
             return ptrToRightSubtree;
         }
@@ -113,7 +114,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         else
         {
             // finMin in right subtree
-            tree_node *minNode = findSmallest(currPtr->right);
+            node_t *minNode = findSmallest(currPtr->right);
 
             // copy its data
             currPtr->node_data = minNode->node_data;
@@ -125,15 +126,15 @@ tree_node *tree::remove(int item, tree_node *currPtr)
     return currPtr;
 }
 
-void tree::DepthView(tree_node *currPtr)
+void BSTree_t::DepthView(node_t *currPtr)
 {
     // call utility that creates a list
-    std::list<std::list<tree_node *>> depthViewList = DepthViewUtility(currPtr);
+    std::list<std::list<node_t *>> depthViewList = DepthViewUtility(currPtr);
 
     // then print the list
-    for (std::list<std::list<tree_node *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
+    for (std::list<std::list<node_t *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
-        for (std::list<tree_node *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
+        for (std::list<node_t *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data << " ";
         }
@@ -141,23 +142,23 @@ void tree::DepthView(tree_node *currPtr)
     }
 }
 
-std::list<std::list<tree_node *>> tree::DepthViewUtility(tree_node *root)
+std::list<std::list<node_t *>> BSTree_t::DepthViewUtility(node_t *root)
 {
     // create a new list of parent and current that
-    std::list<std::list<tree_node *>> DepthViewList;
+    std::list<std::list<node_t *>> DepthViewList;
 
     // utility list to stash level nodes and then push into
     // DepthViewList before moving to next level
-    std::list<tree_node *> current;
+    std::list<node_t *> current;
     current.push_back(root);
 
     while (!current.empty())
     {
         DepthViewList.push_back(current);
-        std::list<tree_node *> parent = current;
+        std::list<node_t *> parent = current;
         current.resize(0);
 
-        for (std::list<tree_node *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
+        for (std::list<node_t *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
         {
             if ((*itr)->left)
             {
@@ -176,7 +177,7 @@ int main()
 {
     std::cout << __FILE__ << std::endl;
 
-    tree obj;
+    BSTree_t obj;
 
     obj.root = obj.insert(5, obj.root);
     obj.root = obj.insert(3, obj.root);
