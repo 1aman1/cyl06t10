@@ -52,8 +52,6 @@ node_t *BSTree::findSmallest(node_t *curr_ptr)
     return curr_ptr;
 }
 
-/*--------------------------------------------- Insert Element into the tree */
-// params : value and the root node
 node_t *BSTree::insert(int newData, node_t *ptr)
 {
     if (!ptr) // no node present, create a new and return
@@ -75,8 +73,6 @@ node_t *BSTree::insert(int newData, node_t *ptr)
     return ptr;
 }
 
-/* ---------------------------------------------Delete element from AVL tree */
-// params : value to remove and the root node
 node_t *BSTree::remove(int data, node_t *curr_ptr)
 {
     // if curr_ptr is null
@@ -216,6 +212,7 @@ AVL_tree_t::AVL_tree_t()
     // BSTree();
 }
 
+/*--------------------------------------------All Rotations for Balancing AVL Tree */
 node_t *AVL_tree_t::rl_rotation(node_t *parent_ptr)
 {
     parent_ptr->right = ll_rotation(parent_ptr->right);
@@ -252,6 +249,8 @@ node_t *AVL_tree_t::ll_rotation(node_t *parent_ptr)
 
     return parents_left_subtree;
 }
+
+/*---------------------------------------------- Balancing AVL Tree */
 
 node_t *AVL_tree_t::balance(node_t *curr_ptr)
 {
