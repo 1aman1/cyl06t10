@@ -130,19 +130,23 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
 /* ---------------------------------------------bird view utility */
 void BSTree_t::DepthView()
 {
-    std::cout << std::endl;
+    std::cout << std::endl
+              << "root=L@1\n";
 
     // call utility that creates a list
     std::list<std::list<node_t *>> depthViewList = DepthViewUtility(root);
 
+    int levelCount = 1;
     // then print the list
     for (std::list<std::list<node_t *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
+        std::cout << "\tL@" << levelCount << " -> ";
         for (std::list<node_t *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data << " ";
         }
         std::cout << std::endl;
+        ++levelCount;
     }
 
     std::cout << std::endl;
@@ -193,25 +197,32 @@ int main()
 {
     std::cout << "Building " << __FILE__ << std::endl;
 
-    BSTree_t obj;
+    BSTree_t *bst_obj = new BSTree_t();
 
     // INSERT & BALANCE TEST
-    obj.insert(7);
-    obj.DepthView();
 
-    obj.insert(5);
-    obj.DepthView();
+    bst_obj->insert(7);
+    bst_obj->DepthView();
 
-    obj.insert(3);
-    obj.DepthView();
+    bst_obj->insert(5);
+    bst_obj->DepthView();
 
-    // REMOVE & BALANCE TEST
+    bst_obj->insert(3);
+    bst_obj->DepthView();
 
-    obj.insert(1);
-    obj.DepthView();
+    bst_obj->insert(9);
+    bst_obj->DepthView();
 
-    obj.remove(7);
-    obj.DepthView();
+    bst_obj->insert(11);
+    bst_obj->DepthView();
+
+    // // REMOVE & BALANCE TEST
+
+    bst_obj->insert(1);
+    bst_obj->DepthView();
+
+    bst_obj->remove(7);
+    bst_obj->DepthView();
 
     return 0;
 }
