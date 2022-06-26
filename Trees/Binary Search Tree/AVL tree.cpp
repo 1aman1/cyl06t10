@@ -153,19 +153,23 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
 /* ---------------------------------------------bird view utility */
 void BSTree_t::DepthView()
 {
-    std::cout << std::endl;
+    std::cout << std::endl
+              << "root=L@1\n";
 
     // call utility that creates a list
     std::list<std::list<node_t *>> depthViewList = DepthViewUtility(root);
 
+    int levelCount = 1;
     // then print the list
     for (std::list<std::list<node_t *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
+        std::cout << "\tL@" << levelCount << " -> ";
         for (std::list<node_t *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data << " ";
         }
         std::cout << std::endl;
+        ++levelCount;
     }
 
     std::cout << std::endl;
@@ -394,27 +398,34 @@ int main()
 {
     std::cout << "Building " << __FILE__ << std::endl;
 
-    AVL_tree_t obj;
+    BSTree_t *bst_obj = new BSTree_t();
 
     // INSERT & BALANCE TEST
-    obj.insert(7);
-    obj.DepthView();
+    bst_obj = new AVL_tree_t();
 
-    obj.insert(5);
-    obj.DepthView();
+    bst_obj->insert(7);
+    std::cout << "insert 7";
+    bst_obj->DepthView();
 
-    obj.insert(3);
-    obj.DepthView();
+    bst_obj->insert(5);
+    std::cout << "insert 5";
+    bst_obj->DepthView();
 
-    // REMOVE & BALANCE TEST
+    AVL_tree_t *avl_obj = dynamic_cast<AVL_tree_t *>(bst_obj);
 
-    obj.insert(1);
-    obj.DepthView();
+    avl_obj->insert(3);
+    std::cout << "insert 3";
+    avl_obj->DepthView();
 
-    obj.remove(7);
-    obj.DepthView();
+    // // REMOVE & BALANCE TEST
+
+    avl_obj->insert(1);
+    std::cout << "insert 1";
+    avl_obj->DepthView();
+
+    avl_obj->remove(7);
+    std::cout << "remove 7";
+    avl_obj->DepthView();
 
     return 0;
 }
-
-//  credits: Adelson-Velskii and Landis
