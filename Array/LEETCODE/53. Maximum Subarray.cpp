@@ -3,27 +3,22 @@
 #include <algorithm>
 #define INT_MIN -99999
 
+// this is known as kadane's algorithm
 class Solution
 {
 public:
-    // O(n)
     int maxSubArray(std::vector<int> &nums)
     {
-        // max of ( current, current + prevMaximum)
-        int prevMaximum = 0;
-        int maximumAbsolute = INT_MIN;
+        int local_maximum = 0;
+        int maximum = INT_MIN;
 
-        for (int i = 0; i < nums.size(); ++i)
+        for (const auto &i : nums)
         {
-            // std::cout << nums[i] << " ";
-            prevMaximum = std::max(nums[i], prevMaximum + nums[i]);
-            // std::cout << prevMaximum << " " << maximumAbsolute << std::endl;
-            if (maximumAbsolute < prevMaximum)
-                maximumAbsolute = prevMaximum;
+            local_maximum = std::max(i, i + local_maximum);
+            if (maximum < local_maximum)
+                maximum = local_maximum;
         }
-
-        // std::cout << prevMaximum << " " << maximumAbsolute;
-        return maximumAbsolute;
+        return maximum;
     }
 };
 
@@ -37,3 +32,5 @@ int main()
 
     return 0;
 }
+
+// credits : kadane
