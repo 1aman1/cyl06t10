@@ -20,6 +20,7 @@ struct node_t
 // BST interface
 class BSTree_t
 {
+
 public:
     BSTree_t();
     void insert(int);
@@ -27,8 +28,12 @@ public:
     void DepthView();
     node_t *findSmallest(node_t *);
 
+    int height();
+
 private:
     node_t *root;
+
+    int heightUtility(node_t *);
 
     virtual node_t *insertUtility(int, node_t *);
     virtual node_t *removeUtility(int, node_t *);
@@ -36,6 +41,21 @@ private:
 };
 
 BSTree_t::BSTree_t() : root(nullptr) {}
+
+int BSTree_t::heightUtility(node_t *curr_ptr)
+{
+    if (!curr_ptr)
+        return 0;
+    int left = heightUtility(curr_ptr->left);
+    int right = heightUtility(curr_ptr->right);
+
+    return (left > right ? left : right) + 1;
+}
+
+int BSTree_t::height()
+{
+    return heightUtility(root);
+}
 
 /*--------------------------------------------- Insert Element into the tree */
 void BSTree_t::insert(int newData)
@@ -130,23 +150,19 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
 /* ---------------------------------------------bird view utility */
 void BSTree_t::DepthView()
 {
-    std::cout << std::endl
-              << "root=L@1\n";
+    std::cout << std::endl;
 
     // call utility that creates a list
     std::list<std::list<node_t *>> depthViewList = DepthViewUtility(root);
 
-    int levelCount = 1;
     // then print the list
     for (std::list<std::list<node_t *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
-        std::cout << "\tL@" << levelCount << " -> ";
         for (std::list<node_t *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data << " ";
         }
         std::cout << std::endl;
-        ++levelCount;
     }
 
     std::cout << std::endl;
@@ -197,32 +213,33 @@ int main()
 {
     std::cout << "Building " << __FILE__ << std::endl;
 
-    BSTree_t *bst_obj = new BSTree_t();
+    BSTree_t obj;
 
     // INSERT & BALANCE TEST
+    obj.insert(7);
+    obj.DepthView();
 
-    bst_obj->insert(7);
-    bst_obj->DepthView();
+    std::cout << "height :" << obj.height() << std::endl;
 
-    bst_obj->insert(5);
-    bst_obj->DepthView();
+    obj.insert(5);
+    obj.DepthView();
 
-    bst_obj->insert(3);
-    bst_obj->DepthView();
+    std::cout << "height :" << obj.height() << std::endl;
 
-    bst_obj->insert(9);
-    bst_obj->DepthView();
+    obj.insert(3);
+    obj.DepthView();
 
-    bst_obj->insert(11);
-    bst_obj->DepthView();
+    std::cout << "height :" << obj.height() << std::endl;
 
-    // // REMOVE & BALANCE TEST
+    // REMOVE & BALANCE TEST
 
-    bst_obj->insert(1);
-    bst_obj->DepthView();
+    obj.insert(1);
+    obj.DepthView();
 
-    bst_obj->remove(7);
-    bst_obj->DepthView();
+    obj.remove(7);
+    obj.DepthView();
+
+    std::cout << "height :" << obj.height() << std::endl;
 
     return 0;
 }

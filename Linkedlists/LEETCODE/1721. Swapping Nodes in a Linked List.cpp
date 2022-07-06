@@ -35,6 +35,7 @@ public:
 
             traverse = traverse->next;
             ++length;
+
         }
     }
 };
