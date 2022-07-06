@@ -1,25 +1,45 @@
-#include <iostream>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Solution
 {
 public:
-    long uniquePaths(int m, int n)
+    int uniquePaths(int m, int n)
     {
-        long totalPossiblePaths = 1;
-        for (int i = n; i < (m + n - 1); i++)
-        {
-            totalPossiblePaths *= i;
-            totalPossiblePaths /= (i - n + 1);
-        }
+       int* dp = new int[n];
         
-        return totalPossiblePaths;
+	dp[0] = 1;
+
+	for (int i = 0; i < m; i++) {
+		for (int j = 1; j < n; j++) {
+			dp[j] += dp[j - 1];
+		}
+        
+	return dp[n-1];
     }
 };
-int main()
-{
-    Solution obj;
-    std::cout << obj.uniquePaths(3, 2)
-              << std::endl;
-
-    return 0;
-}
