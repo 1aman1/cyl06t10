@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <ctime>
 #include <algorithm>
+#include <ctime>
 
 #define RANDOM_RANGE 200
 #define SIZE 12
