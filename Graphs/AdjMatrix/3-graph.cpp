@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <numeric>
 
 typedef std::vector<std::vector<bool>> vec_2d_t;
 typedef std::vector<bool> vec_t;
@@ -78,6 +79,7 @@ void Graph::_fill_graph()
     _matrix[1][2] = true;
     _matrix[2][3] = true;
     _matrix[3][1] = true;
+
     _matrix[3][2] = true;
     _matrix[2][0] = true;
 }
@@ -90,23 +92,22 @@ bool Graph::is_connected(int source_row, int target)
 
         std::cout << "current " << source_row << ":" << target << "\n";
 
-        int key = 1;
-        int occurs_1 = 0;
-        auto lens = std::find(_matrix[source_row].begin() + occurs_1, _matrix[source_row].end(), key);
+        int occurrences_of_1 = 0;
+        auto lens = std::find(_matrix[source_row].begin() + occurrences_of_1, _matrix[source_row].end(), 1);
 
         while (lens != _matrix[source_row].end())
         {
             if (target == lens - _matrix[source_row].begin())
             {
-                std::cout << "connected\n";
+                std::cout << "connection(s) found\n";
                 return true;
             }
 
-            std::cout << "searching further in the " << source_row << " level\n";
+            // std::cout << "searching further in the " << source_row << " level\n";
 
             is_connected(lens - _matrix[source_row].begin(), target);
-            occurs_1 += lens - _matrix[source_row].begin() + 1;
-            lens = std::find(_matrix[source_row].begin() + occurs_1, _matrix[source_row].end(), key);
+            occurrences_of_1 += lens - _matrix[source_row].begin() + 1;
+            lens = std::find(_matrix[source_row].begin() + occurrences_of_1, _matrix[source_row].end(), 1);
         }
     }
 }
@@ -121,6 +122,8 @@ int main()
     obj.print_graph();
 
     obj.is_connected(1, 1);
+    // obj.is_connected(0, 3);
+    // obj.is_connected(0, 0);
 
     return 0;
 }
