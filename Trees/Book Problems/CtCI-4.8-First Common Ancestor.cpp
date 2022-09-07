@@ -10,94 +10,101 @@ node has data, left child, right child & parent ptr too.
 implements LCA for BST
 */
 
-struct tree_node
+struct node;
+
+typedef std::list<std::list<node *>> adj_list_t;
+typedef std::list<node *> list_t;
+
+struct node
 {
-    int node_data;
+    int data;
 
-    tree_node *left;
-    tree_node *right;
+    node *left;
+    node *right;
 
-    tree_node *parent;
+    node *parent;
 
-    tree_node(int newdata) : node_data(newdata),
-                             left(nullptr),
-                             right(nullptr),
-                             parent(nullptr) {}
+    node() = delete;
+
+    node(int newdata) : data(newdata),
+                        left(nullptr),
+                        right(nullptr),
+                        parent(nullptr) {}
 };
 
 class tree
 {
 public:
-    tree_node *root;
+    node *root;
 
     tree() : root(nullptr){};
 
-    tree_node *insert(int, tree_node *);
+    node *insert(int, node *);
 
-    tree_node *remove(int, tree_node *);
-    tree_node *findSmallest(tree_node *currPtr);
+    node *remove(int, node *);
+    node *findSmallest(node *currPtr);
 
     // LCA
-    tree_node *FirstCommonAncestor(tree_node *, tree_node *);
-    int height(tree_node *);
-    tree_node *searchKey(tree_node *, tree_node *);
+    node *FirstCommonAncestor(node *, node *);
+    int height(node *);
+    node *searchKey(node *, node *);
 
     // view
-    void DepthView(tree_node *);
-    std::list<std::list<tree_node *>> DepthViewUtility(tree_node *);
+    void DepthView(node *);
+    adj_list_t DepthViewUtility(node *);
 };
 
-tree_node *tree::searchKey(tree_node *_root, tree_node *currNode)
+node *tree::searchKey(node *_root, node *curr_node)
 {
-    if (currNode == nullptr || currNode->node_data == _root->node_data)
+    if (curr_node == nullptr || curr_node->data == _root->data)
     {
-        return currNode;
+        return curr_node;
     }
-    else if (currNode->node_data < _root->node_data)
+    else if (curr_node->data < _root->data)
     {
-        return searchKey(_root->left, currNode);
+        return searchKey(_root->left, curr_node);
     }
     else
     {
-        return searchKey(_root->right, currNode);
+        return searchKey(_root->right, curr_node);
     }
 }
 
-void tree::DepthView(tree_node *currPtr)
+void tree::DepthView(node *currPtr)
 {
     // call utility that creates a list
-    std::list<std::list<tree_node *>> depthViewList = DepthViewUtility(currPtr);
+    adj_list_t depthViewList = DepthViewUtility(currPtr);
 
     // then print the list
-    for (std::list<std::list<tree_node *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
+    for (auto itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
-        for (std::list<tree_node *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
+        for (auto nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
-            std::cout << (*nestItr)->node_data;
+            std::cout << (*nestItr)->data;
             if ((*nestItr)->parent != nullptr)
-                std::cout << "^parent" << (*nestItr)->parent->node_data << " ";
+                std::cout << "^parent" << (*nestItr)->parent->data << " ";
         }
         std::cout << std::endl;
     }
 }
 
-std::list<std::list<tree_node *>> tree::DepthViewUtility(tree_node *root)
+adj_list_t tree::DepthViewUtility(node *root)
 {
     // create a new list of parent and current that
-    std::list<std::list<tree_node *>> DepthViewList;
+    adj_list_t DepthViewList;
 
     // utility list to stash level nodes and then push into
     // DepthViewList before moving to next level
-    std::list<tree_node *> current;
+    list_t current;
     current.push_back(root);
 
     while (!current.empty())
     {
         DepthViewList.push_back(current);
-        std::list<tree_node *> parent = current;
+        list_t parent = current;
         current.resize(0);
 
-        for (std::list<tree_node *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
+        for (auto itr = parent.begin(); itr != parent.end(); ++itr)
         {
             if ((*itr)->left)
             {
@@ -112,26 +119,26 @@ std::list<std::list<tree_node *>> tree::DepthViewUtility(tree_node *root)
     return DepthViewList;
 }
 
-tree_node *tree::insert(int newdata, tree_node *ptr)
+node *tree::insert(int newdata, node *ptr)
 {
     if (!ptr)
     {
-        return new tree_node(newdata);
+        return new node(newdata);
     }
     // ptr here would be the parent of the newNode when put successfully
     // ptr can be assigned as the parent of newNode
-    if (newdata < ptr->node_data)
+    if (newdata < ptr->data)
     {
 
-        tree_node *left_child_node = insert(newdata, ptr->left);
+        node *left_child_node = insert(newdata, ptr->left);
         ptr->left = left_child_node;
 
         left_child_node->parent = ptr;
     }
 
-    else //(newdata > ptr->node_data)
+    else //(newdata > ptr->data)
     {
-        tree_node *right_child_node = insert(newdata, ptr->right);
+        node *right_child_node = insert(newdata, ptr->right);
         ptr->right = right_child_node;
         right_child_node->parent = ptr;
     }
@@ -139,7 +146,7 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
     return ptr;
 }
 
-tree_node *tree::findSmallest(tree_node *currPtr)
+node *tree::findSmallest(node *currPtr)
 {
     // validation for currPtr deals with nullptr also
     while (currPtr && currPtr->left)
@@ -148,18 +155,18 @@ tree_node *tree::findSmallest(tree_node *currPtr)
     return currPtr;
 }
 
-tree_node *tree::remove(int item, tree_node *currPtr)
+node *tree::remove(int item, node *currPtr)
 {
     // if it is null
     if (currPtr == nullptr)
         return currPtr;
 
     // if value to delete is less than current node's value, go left
-    else if (item < currPtr->node_data)
+    else if (item < currPtr->data)
         currPtr->left = remove(item, currPtr->left);
 
     // if value to delete is greater than current node's value, go right
-    else if (item > currPtr->node_data)
+    else if (item > currPtr->data)
         currPtr->right = remove(item, currPtr->right);
 
     // if no condition matches, then
@@ -176,7 +183,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         // node with a left subtree
         else if (currPtr->left != nullptr && currPtr->right == nullptr)
         {
-            tree_node *ptrToLeftSubtree = currPtr->left;
+            node *ptrToLeftSubtree = currPtr->left;
             delete currPtr;
             return ptrToLeftSubtree;
         }
@@ -184,7 +191,7 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         // node with a right subtree
         else if (currPtr->left == nullptr && currPtr->right != nullptr)
         {
-            tree_node *ptrToRightSubtree = currPtr->right;
+            node *ptrToRightSubtree = currPtr->right;
             delete currPtr;
             return ptrToRightSubtree;
         }
@@ -193,30 +200,30 @@ tree_node *tree::remove(int item, tree_node *currPtr)
         else
         {
             // finMin in right subtree
-            tree_node *minNode = findSmallest(currPtr->right);
+            node *minNode = findSmallest(currPtr->right);
 
             // copy its data
-            currPtr->node_data = minNode->node_data;
+            currPtr->data = minNode->data;
 
             // lastly call minNode deletion in its subtree
-            currPtr->right = remove(minNode->node_data, currPtr->right);
+            currPtr->right = remove(minNode->data, currPtr->right);
         }
     }
     return currPtr;
 }
 
-int tree::height(tree_node *currNode)
+int tree::height(node *curr_node)
 {
     int height = 0;
-    while (currNode)
+    while (curr_node)
     {
-        currNode = currNode->parent;
+        curr_node = curr_node->parent;
         ++height;
     }
     return height;
 }
 
-tree_node *tree::FirstCommonAncestor(tree_node *p, tree_node *q)
+node *tree::FirstCommonAncestor(node *p, node *q)
 {
     // where either one of the pointers given is a bluff
     if (searchKey(root, p) == nullptr || searchKey(root, q) == nullptr)
@@ -229,7 +236,7 @@ tree_node *tree::FirstCommonAncestor(tree_node *p, tree_node *q)
     int depth_p = height(p);
     int depth_q = height(q);
 
-    tree_node *coverUp = nullptr;
+    node *coverUp = nullptr;
 
     depth_p > depth_q ? coverUp = p : coverUp = q;
 
@@ -244,7 +251,7 @@ tree_node *tree::FirstCommonAncestor(tree_node *p, tree_node *q)
 
     depth_p > depth_q ? p = coverUp : q = coverUp;
 
-    while (p && q && p->node_data != q->node_data)
+    while (p && q && p->data != q->data)
     {
         p = p->parent;
         q = q->parent;
@@ -268,16 +275,16 @@ int main()
 
     // LCA for 7 & 2 should be root ie, 5
 
-    tree_node *p = nullptr;
-    tree_node *q = nullptr;
-    tree_node *res = nullptr;
+    node *p = nullptr;
+    node *q = nullptr;
+    node *res = nullptr;
 
     // create tmp objects for find
 
-    tree_node *tmp1 = new tree_node(20);
+    node *tmp1 = new node(20);
     p = obj.searchKey(obj.root, tmp1);
 
-    tree_node *tmp2 = new tree_node(70);
+    node *tmp2 = new node(70);
     q = obj.searchKey(obj.root, tmp2);
 
     std::cout << "p " << obj.height(p) << std::endl;
@@ -289,7 +296,7 @@ int main()
     // res = obj.FirstCommonAncestor(nullptr, q);
 
     if (res)
-        std::cout << res->node_data << std::endl;
+        std::cout << res->data << std::endl;
     else
         std::cout << "nullptr\n";
 
