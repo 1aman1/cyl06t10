@@ -79,26 +79,29 @@ class View_utility : public Tree
 {
 
 public:
+    // iterative
     void
-    view(bool left = false, bool right = false);
+    right_view_1();
+
+    // recursive
+    void
+    right_view_2();
 
 private:
-    std::string side;
+    void
+    _right_view_util(node *, int, int &);
 };
 
-void View_utility::view(bool left, bool right)
+void View_utility::right_view_1()
 {
     list parent = {_root};
     list current;
 
-    left == true ? side = "left" : side = "right";
-
-    std::cout << side << " view : ";
+    std::cout << "Right view : ";
 
     while (!parent.empty())
     {
-        side == "left" ? std::cout << parent.front()->data << "\n"
-                       : std::cout << parent.back()->data << "\n";
+        std::cout << parent.back()->data << "\n";
 
         for (auto itr = parent.begin(); itr != parent.end(); ++itr)
         {
@@ -111,6 +114,33 @@ void View_utility::view(bool left, bool right)
         parent.swap(current);
         current.clear();
     }
+}
+
+void View_utility::right_view_2()
+{
+    int curr_level = 1;
+    int last_printed_level = 0;
+
+    // print the right view
+    _right_view_util(_root, curr_level, last_printed_level);
+}
+
+void View_utility::_right_view_util(node *curr_ptr, int curr_level, int &last_printed_level)
+{
+    // if curr_ptr is null, there is nothing to do
+    if (curr_ptr == nullptr)
+    {
+        return;
+    }
+
+    if (curr_level > last_printed_level)
+    {
+        std::cout << curr_ptr->data << " \n";
+        last_printed_level = curr_level;
+    }
+
+    _right_view_util(curr_ptr->right, curr_level + 1, last_printed_level);
+    _right_view_util(curr_ptr->left, curr_level + 1, last_printed_level);
 }
 
 int main()
@@ -140,8 +170,9 @@ int main()
 
     // obj.view_in_order();
 
-    obj.view(true, false);
-    obj.view(false, true);
+    obj.right_view_1();
+
+    obj.right_view_2();
 
     return 0;
 }
