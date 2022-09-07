@@ -1,54 +1,60 @@
+
 #include <iostream>
 #include <list>
-#define DEBUG false
+
+struct node;
+
+typedef std::list<std::list<node *>> adj_list_t;
+typedef std::list<node *> list_t;
+
 /*
 node has data, left child, right child & parent ptr too.
 */
 
-struct tree_node
+struct node
 {
     int node_data;
 
-    tree_node *left;
-    tree_node *right;
+    node *left;
+    node *right;
 
-    tree_node *parent;
+    node *parent;
 
-    tree_node(int newdata) : node_data(newdata),
-                             left(nullptr),
-                             right(nullptr),
-                             parent(nullptr) {}
+    node(int newdata) : node_data(newdata),
+                        left(nullptr),
+                        right(nullptr),
+                        parent(nullptr) {}
 };
 
 class tree
 {
 public:
-    tree_node *root;
+    node *root;
 
     tree() : root(nullptr){};
 
-    tree_node *insert(int, tree_node *);
+    node *insert(int, node *);
 
-    tree_node *successor(tree_node *);
-    tree_node *findSmallest(tree_node *currPtr);
+    node *successor(node *);
+    node *findSmallest(node *currPtr);
 
     // view
-    void DepthView(tree_node *);
-    std::list<std::list<tree_node *>> DepthViewUtility(tree_node *);
+    void DepthView(node *);
+    adj_list_t DepthViewUtility(node *);
 };
 
-tree_node *tree::insert(int newdata, tree_node *ptr)
+node *tree::insert(int newdata, node *ptr)
 {
     if (!ptr)
     {
-        return new tree_node(newdata);
+        return new node(newdata);
     }
     // ptr here would be the parent of the newNode when put successfully
     // ptr can be assigned as the parent of newNode
     if (newdata < ptr->node_data)
     {
 
-        tree_node *left_child_node = insert(newdata, ptr->left);
+        node *left_child_node = insert(newdata, ptr->left);
         ptr->left = left_child_node;
 
         left_child_node->parent = ptr;
@@ -56,7 +62,7 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
 
     else //(newdata > ptr->node_data)
     {
-        tree_node *right_child_node = insert(newdata, ptr->right);
+        node *right_child_node = insert(newdata, ptr->right);
         ptr->right = right_child_node;
 
         right_child_node->parent = ptr;
@@ -65,7 +71,7 @@ tree_node *tree::insert(int newdata, tree_node *ptr)
     return ptr;
 }
 
-tree_node *tree::findSmallest(tree_node *currPtr)
+node *tree::findSmallest(node *currPtr)
 {
     // validation for currPtr deals with nullptr also
     while (currPtr && currPtr->left)
@@ -74,15 +80,15 @@ tree_node *tree::findSmallest(tree_node *currPtr)
     return currPtr;
 }
 
-void tree::DepthView(tree_node *currPtr)
+void tree::DepthView(node *currPtr)
 {
     // call utility that creates a list
-    std::list<std::list<tree_node *>> depthViewList = DepthViewUtility(currPtr);
+    adj_list_t depthViewList = DepthViewUtility(currPtr);
 
     // then print the list
-    for (std::list<std::list<tree_node *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
+    for (auto itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
-        for (std::list<tree_node *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
+        for (auto nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data;
             if ((*nestItr)->parent != nullptr)
@@ -92,29 +98,32 @@ void tree::DepthView(tree_node *currPtr)
     }
 }
 
-std::list<std::list<tree_node *>> tree::DepthViewUtility(tree_node *root)
+adj_list_t tree::DepthViewUtility(node *root)
 {
     // create a new list of parent and current that
-    std::list<std::list<tree_node *>> DepthViewList;
+    adj_list_t DepthViewList;
 
     // utility list to stash level nodes and then push into
     // DepthViewList before moving to next level
-    std::list<tree_node *> current;
+    list_t current;
+    list_t parent;
+    
     current.push_back(root);
 
     while (!current.empty())
     {
         DepthViewList.push_back(current);
-        std::list<tree_node *> parent = current;
+
+        parent.swap(current);
         current.resize(0);
 
-        for (std::list<tree_node *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
+        for (auto itr = parent.begin(); itr != parent.end(); ++itr)
         {
-            if ((*itr)->left)
+            if ((*itr)->left != nullptr)
             {
                 current.push_back((*itr)->left);
             }
-            if ((*itr)->right)
+            if ((*itr)->right != nullptr)
             {
                 current.push_back((*itr)->right);
             }
@@ -123,34 +132,24 @@ std::list<std::list<tree_node *>> tree::DepthViewUtility(tree_node *root)
     return DepthViewList;
 }
 
-tree_node *tree::successor(tree_node *Node)
+node *tree::successor(node *curr_ptr)
 {
-    DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
+    if (curr_ptr == nullptr)
+        return curr_ptr;
 
-    if (Node == nullptr)
-        return Node;
+    if (curr_ptr->right != nullptr)
+        return findSmallest(curr_ptr->right);
 
-    DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
-
-    if (Node->right != nullptr)
-        return findSmallest(Node->right);
     else
     {
-
-        DEBUG == true ? std::cout << __LINE__ << " " << Node->node_data << " parent: " << Node->parent->node_data << std::endl : std::cout << "";
-
-        tree_node *currPtr = Node;
-        tree_node *parent_of_currPtr = currPtr->parent;
-
-        DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
+        node *currPtr = curr_ptr;
+        node *parent_of_currPtr = currPtr->parent;
 
         while (parent_of_currPtr != nullptr && parent_of_currPtr->left != currPtr)
         {
             currPtr = parent_of_currPtr;
             parent_of_currPtr = parent_of_currPtr->parent;
         }
-
-        DEBUG == true ? std::cout << __LINE__ << "" << std::endl : std::cout << "";
 
         return parent_of_currPtr;
     }
@@ -175,7 +174,7 @@ int main()
     obj.DepthView(obj.root);
     std::cout << std::endl;
 
-    tree_node *result = obj.root->left;
+    node *result = obj.root->left;
     result = obj.successor(result);
 
     if (result != nullptr)
