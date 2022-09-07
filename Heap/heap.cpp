@@ -3,26 +3,24 @@
 #include <algorithm>
 #include <ctime>
 
-#define RANDOM_RANGE 200
-#define SIZE 12
+constexpr int RANDOM_RANGE = 200;
+constexpr int SIZE = 12;
 
-class Array
+class Array_t
 {
-private:
-    // void test();
-
 protected:
     std::vector<int> array;
-    int size_of_arr = 0;
+    int _size_of_arr = 0;
 
 public:
-    Array(int x);
+    Array_t(int x);
     void print_array();
 };
 
-Array::Array(int len)
+Array_t::Array_t(int len)
 {
     array.resize(len);
+    _size_of_arr = len;
 
     srand(time(nullptr));
     std::generate(array.begin(),
@@ -31,7 +29,7 @@ Array::Array(int len)
                   { return rand() % RANDOM_RANGE; });
 }
 
-void Array::print_array()
+void Array_t::print_array()
 {
     std::cout << "\narray: ";
     for (auto itr = array.begin(); itr != array.end(); ++itr)
@@ -41,18 +39,66 @@ void Array::print_array()
 }
 
 // Heap implementation
-class heap : public Array
+class Heap_t : public Array_t
 {
 private:
-    void build_heap();
-    void heapify(int, int);
+    void
+    heapify(int, int);
+
+    void
+    build_heap();
 
 public:
-    heap(int x) : Array(x) {}
-    void sort_heap();
+    Heap_t(int x) : Array_t(x) {}
+
+public:
+    void
+    push(int);
+
+    int
+    pop();
+
+    bool
+    is_heap();
+
+    void
+    sort_heap();
 };
 
-void heap::heapify(int index, int heap_len)
+bool Heap_t::is_heap()
+{
+    for (auto i = 0; i < _size_of_arr / 2; ++i)
+    {
+        if ((array[i]) < array[i * 2 + 1] ||
+            (i * 2 + 2 < _size_of_arr && array[i * 2 + 2] > array[i]))
+            return false;
+    }
+    return true;
+}
+
+int Heap_t::pop()
+{
+    int heap_top = array.front();
+
+    std::swap(array.front(), array.back());
+
+    array.pop_back();
+    --_size_of_arr;
+
+    build_heap();
+
+    return heap_top;
+}
+
+void Heap_t::push(int newValue)
+{
+    array.push_back(newValue);
+    ++_size_of_arr;
+
+    build_heap();
+}
+
+void Heap_t::heapify(int index, int heap_len)
 {
     int l = index * 2 + 1;
     int r = index * 2 + 2;
@@ -72,21 +118,21 @@ void heap::heapify(int index, int heap_len)
     }
 }
 
-void heap::build_heap()
+void Heap_t::build_heap()
 {
-    for (int i = size_of_arr / 2 - 1; i >= 0; --i)
+    for (int i = _size_of_arr / 2 - 1; i >= 0; --i)
     {
-        heapify(i, size_of_arr);
+        heapify(i, _size_of_arr);
     }
 }
 
-void heap::sort_heap()
+void Heap_t::sort_heap()
 {
-    // first prepare the array sequence into a heap
+    // first prepare the array sequence into a Heap_t
     build_heap();
 
     // sort logic
-    for (int i = size_of_arr - 1; i > 0; --i)
+    for (int i = _size_of_arr - 1; i > 0; --i)
     {
         std::swap(array[i], array[0]);
         heapify(0, i);
@@ -95,13 +141,28 @@ void heap::sort_heap()
 
 int main()
 {
-    heap obj(SIZE);
+    Heap_t obj(SIZE);
+
+    std::cout << "\nDefault array: ";
+    obj.print_array();
+    std::cout << "\nis Heap_t ? " << std::boolalpha << obj.is_heap();
 
     obj.print_array();
+    obj.push(500);
+    obj.print_array();
+
+    std::cout << "\npopped: " << obj.pop();
+    obj.print_array();
+    std::cout << "\nis Heap_t ? " << std::boolalpha << obj.is_heap();
 
     obj.sort_heap();
-
     obj.print_array();
+    std::cout << "\nis Heap_t ? " << std::boolalpha << obj.is_heap();
 
+    obj.push(1000);
+    obj.print_array();
+    std::cout << "\nis Heap_t ? " << std::boolalpha << obj.is_heap();
+
+    std::cout << std::endl;
     return 0;
 }
