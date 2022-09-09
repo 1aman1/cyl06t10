@@ -1,5 +1,6 @@
 #include <iostream>
 #include <set>
+
 void make_permutation(std::string str, int l, int r, std::set<std::string> &set)
 {
     if (l == r)
@@ -17,12 +18,15 @@ void make_permutation(std::string str, int l, int r, std::set<std::string> &set)
 
 int main()
 {
-    std::string str = "AMAN";
+    std::string str = "racecar";
+
     std::set<std::string> set;
     make_permutation(str, 0, str.size() - 1, set);
 
-    for (auto i : set)
-        std::cout << i << std::endl;
+    // for (auto &i : set)
+    //     std::cout << i << std::endl;
+
+    std::cout << set.size() << std::endl;
 
     return 0;
 }
