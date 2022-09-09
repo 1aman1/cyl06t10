@@ -12,6 +12,8 @@ struct node_t
     node_t *left;
     node_t *right;
 
+    node_t() = delete;
+
     node_t(int newData) : node_data(newData),
                           left(nullptr),
                           right(nullptr) {}
@@ -21,18 +23,35 @@ struct node_t
 class BSTree_t
 {
 public:
+    typedef std::list<std::list<node_t *>> adj_list;
+    typedef std::list<node_t *> list;
+
+public:
     BSTree_t();
-    void insert(int);
-    void remove(int);
-    void DepthView();
-    node_t *findSmallest(node_t *);
+
+    void
+    insert(int);
+
+    void
+    remove(int);
+
+    void
+    DepthView();
+
+    node_t *
+    find_smallest(node_t *);
 
 private:
     node_t *root;
 
-    virtual node_t *insertUtility(int, node_t *);
-    virtual node_t *removeUtility(int, node_t *);
-    std::list<std::list<node_t *>> DepthViewUtility(node_t *);
+    virtual node_t *
+    _insert_utility(int, node_t *);
+
+    virtual node_t *
+    _remove_utility(int, node_t *);
+
+    adj_list
+    _depth_view_utility(node_t *);
 };
 
 // AVL interface : extended BST class to provide AVL behaviour
@@ -42,13 +61,21 @@ public:
     AVL_tree_t();
 
 private:
-    node_t *insertUtility(int, node_t *);
-    node_t *removeUtility(int, node_t *);
+    node_t *
+    _insert_utility(int, node_t *);
+
+    node_t *
+    _remove_utility(int, node_t *);
 
     // utilities
-    int height(node_t *);
-    int height_difference(node_t *);
-    node_t *balance(node_t *);
+    int
+    height(node_t *);
+
+    int
+    height_difference(node_t *);
+
+    node_t *
+    balance(node_t *);
 
     node_t *ll_rotation(node_t *);
     node_t *lr_rotation(node_t *);
@@ -63,10 +90,10 @@ AVL_tree_t::AVL_tree_t() {}
 /*--------------------------------------------- Insert Element into the tree */
 void BSTree_t::insert(int newData)
 {
-    root = insertUtility(newData, root);
+    root = _insert_utility(newData, root);
 }
 
-node_t *BSTree_t::insertUtility(int newData, node_t *ptr)
+node_t *BSTree_t::_insert_utility(int newData, node_t *ptr)
 {
     if (!ptr) // no node present, create a new and return
     {
@@ -76,12 +103,12 @@ node_t *BSTree_t::insertUtility(int newData, node_t *ptr)
     // go to left subtree
     if (newData < ptr->node_data)
     {
-        ptr->left = insertUtility(newData, ptr->left);
+        ptr->left = _insert_utility(newData, ptr->left);
     }
 
     else //(newData > ptr->node_data) // go to right subtree
     {
-        ptr->right = insertUtility(newData, ptr->right);
+        ptr->right = _insert_utility(newData, ptr->right);
     }
 
     return ptr;
@@ -90,10 +117,11 @@ node_t *BSTree_t::insertUtility(int newData, node_t *ptr)
 /* ---------------------------------------------Delete element from AVL tree */
 void BSTree_t::remove(int newData)
 {
-    root = removeUtility(newData, root);
+    root = _remove_utility(newData, root);
 }
 
-node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
+node_t *
+BSTree_t::_remove_utility(int data, node_t *curr_ptr)
 {
     // if curr_ptr is null
     if (curr_ptr == nullptr)
@@ -101,11 +129,11 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
 
     // if delete node has less than current node's value, go left
     else if (data < curr_ptr->node_data)
-        curr_ptr->left = removeUtility(data, curr_ptr->left);
+        curr_ptr->left = _remove_utility(data, curr_ptr->left);
 
     // if  delete node has greater than current node's value, go right
     else if (data > curr_ptr->node_data)
-        curr_ptr->right = removeUtility(data, curr_ptr->right);
+        curr_ptr->right = _remove_utility(data, curr_ptr->right);
 
     // if no condition matches, then
     // it is the curr_ptr that has to be deleted
@@ -138,13 +166,13 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
         else
         {
             // finMin in right subtree
-            node_t *minNode = findSmallest(curr_ptr->right);
+            node_t *minNode = find_smallest(curr_ptr->right);
 
             // copy its data
             curr_ptr->node_data = minNode->node_data;
 
             // lastly call minNode deletion in its subtree
-            curr_ptr->right = removeUtility(minNode->node_data, curr_ptr->right);
+            curr_ptr->right = _remove_utility(minNode->node_data, curr_ptr->right);
         }
     }
     return curr_ptr;
@@ -153,18 +181,18 @@ node_t *BSTree_t::removeUtility(int data, node_t *curr_ptr)
 /* ---------------------------------------------bird view utility */
 void BSTree_t::DepthView()
 {
-    std::cout << std::endl
-              << "root=L@1\n";
+    std::cout << "\nroot=L@1\n";
 
     // call utility that creates a list
-    std::list<std::list<node_t *>> depthViewList = DepthViewUtility(root);
+    adj_list depthViewList = _depth_view_utility(root);
 
     int levelCount = 1;
-    // then print the list
-    for (std::list<std::list<node_t *>>::iterator itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
+
+    // print the list
+    for (auto itr = depthViewList.begin(); itr != depthViewList.end(); ++itr)
     {
         std::cout << "\tL@" << levelCount << " -> ";
-        for (std::list<node_t *>::iterator nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
+        for (auto nestItr = (*itr).begin(); nestItr != (*itr).end(); ++nestItr)
         {
             std::cout << (*nestItr)->node_data << " ";
         }
@@ -175,23 +203,24 @@ void BSTree_t::DepthView()
     std::cout << std::endl;
 }
 
-std::list<std::list<node_t *>> BSTree_t::DepthViewUtility(node_t *root)
+BSTree_t::adj_list
+BSTree_t::_depth_view_utility(node_t *root)
 {
     // create a new list of parent and current that
-    std::list<std::list<node_t *>> DepthViewList;
+    adj_list DepthViewList;
 
     // utility list to stash level nodes and then push into
     // DepthViewList before moving to next level
-    std::list<node_t *> current;
+    list current;
     current.push_back(root);
 
     while (!current.empty())
     {
         DepthViewList.push_back(current);
-        std::list<node_t *> parent = current;
+        list parent = current;
         current.resize(0);
 
-        for (std::list<node_t *>::iterator itr = parent.begin(); itr != parent.end(); ++itr)
+        for (auto itr = parent.begin(); itr != parent.end(); ++itr)
         {
             if ((*itr)->left)
             {
@@ -208,7 +237,7 @@ std::list<std::list<node_t *>> BSTree_t::DepthViewUtility(node_t *root)
 
 /* ---------------------------------------------to find the minimum value node */
 // params : node_t * T
-node_t *BSTree_t::findSmallest(node_t *curr_ptr)
+node_t *BSTree_t::find_smallest(node_t *curr_ptr)
 {
     while (curr_ptr && curr_ptr->left) // validation for curr_ptr deals with nullptr also
         curr_ptr = curr_ptr->left;
@@ -309,7 +338,7 @@ int AVL_tree_t::height(node_t *ptr)
 
 /*--------------------------------------------- Insert Element into the tree */
 // params : value
-node_t *AVL_tree_t::insertUtility(int newData, node_t *ptr)
+node_t *AVL_tree_t::_insert_utility(int newData, node_t *ptr)
 {
     if (!ptr) // no node present, create a new and return
     {
@@ -319,13 +348,13 @@ node_t *AVL_tree_t::insertUtility(int newData, node_t *ptr)
     // go to left subtree
     if (newData < ptr->node_data)
     {
-        ptr->left = insertUtility(newData, ptr->left);
+        ptr->left = _insert_utility(newData, ptr->left);
         ptr = balance(ptr);
     }
 
     else //(newData > ptr->node_data) // go to right subtree
     {
-        ptr->right = insertUtility(newData, ptr->right);
+        ptr->right = _insert_utility(newData, ptr->right);
         ptr = balance(ptr);
     }
 
@@ -334,7 +363,7 @@ node_t *AVL_tree_t::insertUtility(int newData, node_t *ptr)
 
 /* ---------------------------------------------Delete element from AVL tree */
 // params : value to remove
-node_t *AVL_tree_t::removeUtility(int data, node_t *curr_ptr)
+node_t *AVL_tree_t::_remove_utility(int data, node_t *curr_ptr)
 {
     // if curr_ptr is null
     if (curr_ptr == nullptr)
@@ -342,11 +371,11 @@ node_t *AVL_tree_t::removeUtility(int data, node_t *curr_ptr)
 
     // if delete node has less than current node's value, go left
     else if (data < curr_ptr->node_data)
-        curr_ptr->left = removeUtility(data, curr_ptr->left);
+        curr_ptr->left = _remove_utility(data, curr_ptr->left);
 
     // if  delete node has greater than current node's value, go right
     else if (data > curr_ptr->node_data)
-        curr_ptr->right = removeUtility(data, curr_ptr->right);
+        curr_ptr->right = _remove_utility(data, curr_ptr->right);
 
     // if no condition matches, then
     // it is the curr_ptr that has to be deleted
@@ -379,13 +408,13 @@ node_t *AVL_tree_t::removeUtility(int data, node_t *curr_ptr)
         else
         {
             // finMin in right subtree
-            node_t *minNode = findSmallest(curr_ptr->right);
+            node_t *minNode = find_smallest(curr_ptr->right);
 
             // copy its data
             curr_ptr->node_data = minNode->node_data;
 
             // lastly call minNode deletion in its subtree
-            curr_ptr->right = removeUtility(minNode->node_data, curr_ptr->right);
+            curr_ptr->right = _remove_utility(minNode->node_data, curr_ptr->right);
         }
     }
 
