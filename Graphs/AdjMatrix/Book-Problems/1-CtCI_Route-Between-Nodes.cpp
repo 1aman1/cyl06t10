@@ -13,10 +13,11 @@ This graph uses fixed size matrix
 class graph
 {
 private:
+    bool _visited[4];
+    void initGraphwithFalse();
+
 public:
     bool matGraph[4][4];
-    bool visited[4];
-    void initGraphwithFalse();
     void print();
     bool routeBetweenNodes(int source, int target);
     graph()
@@ -53,9 +54,9 @@ bool graph::routeBetweenNodes(int source, int target)
 {
     if (source == target)
         return true;
-    if (visited[source] != true)
+    if (_visited[source] != true)
     {
-        visited[source] = true;
+        _visited[source] = true;
 
         for (int col = 0; col < 4; ++col)
         {
@@ -90,7 +91,7 @@ int main()
 
     int source = 0;
     int target = 2;
-    std::cout << "route between nodes exists ? "
+    std::cout << "Is " << source << " and " << target << " connected "
               << std::boolalpha
               << obj.routeBetweenNodes(source, target);
 

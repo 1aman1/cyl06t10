@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <list>
 #include <iterator>
 #include <queue>
@@ -6,7 +7,7 @@
 /*
 1-> implement graph using array of list
 
-2-> a function for BFS traversal
+2-> a function for routeBetweenNode traversal
 */
 
 struct graph
@@ -29,9 +30,9 @@ struct graph
 	void print();
 	void add_edge(int, int);
 
-	// BFS utility
+	// BFS utility for route between nodes
 	bool *visited;
-	void BFS(int);
+	bool routeBetweenNode(int, int);
 };
 
 void graph::print()
@@ -40,7 +41,6 @@ void graph::print()
 	{
 		std::cout << "vertex :" << i << " : ";
 		{
-			// traverse neighbour for the current vertex
 			std::list<int>::iterator it;
 			for (it = adjacencyList[i].begin(); it != adjacencyList[i].end(); ++it)
 			{
@@ -60,21 +60,29 @@ void graph::add_edge(int u, int v)
 	// adjacencyList[v].push_back(u);
 }
 
-void graph::BFS(int source)
+bool graph::routeBetweenNode(int src, int target)
 {
+	if (src == target)
+	{
+		return true;
+	}
+
 	std::queue<int> Q;
 
-	Q.emplace(source);
+	Q.emplace(src);
 	while (!Q.empty())
 	{
 		int top = Q.front();
 		Q.pop();
 
-		std::cout << "visiting " << top << std::endl;
 		visited[top] = true;
 
 		for (std::list<int>::iterator it = adjacencyList[top].begin(); it != adjacencyList[top].end(); ++it)
 		{
+			if (*it == target)
+			{
+				return true;
+			}
 			if (visited[*it] != true)
 			{
 				visited[*it] = true;
@@ -82,6 +90,7 @@ void graph::BFS(int source)
 			}
 		}
 	}
+	return false;
 }
 
 int main()
@@ -102,7 +111,11 @@ int main()
 
 	go.print();
 
-	go.BFS(0);
+	int src = 0;
+	int target = 2;
+	std::cout << "route between nodes exists ? "
+			  << std::boolalpha
+			  << go.routeBetweenNode(src, target);
 
 	return 0;
 }

@@ -1,10 +1,10 @@
 #include <iostream>
+#include <vector>
 #include <list>
 #include <iterator>
-#include <vector>
 
 /*
-1-> implement graph using array of list
+1-> implement graph using vector of list
 
 2-> a function for DFS traversal
 */
@@ -12,22 +12,22 @@
 struct graph
 {
 	// graph utility
-	std::list<int> *adjacencyList;
+	std::vector<std::list<int>> adjacencyList;
 	int vertices;
 
 	graph(int v) : vertices(v)
 	{
-		adjacencyList = new std::list<int>[vertices];
+		std::list<int> tmp;
+		adjacencyList.assign(vertices, tmp);
 
-		visited = new bool[vertices];
-		for (int i = 0; i < vertices; ++i) { visited[i] = false; }
+		visited.assign(vertices, false);
 	}
 
 	void add_edge(int, int);
 	void print();
 
 	// DFS utility
-	bool *visited;
+	std::vector<bool> visited;
 	void DFS(int);
 };
 
@@ -57,9 +57,9 @@ void graph::add_edge(int u, int v)
 	// adjacencyList[v].push_back(u);
 }
 
-void graph::DFS(int source)
+void graph::DFS(int src)
 {
-	for (int i = source; i < vertices; ++i)
+	for (int i = src; i < vertices; ++i)
 	{
 		if (visited[i] == true)
 			continue;
