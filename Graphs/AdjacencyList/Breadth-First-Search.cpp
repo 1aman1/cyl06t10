@@ -69,14 +69,14 @@ void Graph::add_edge(int u, int v)
 
 //-BFS-/
 
-struct BFS_Graph : public Graph
+struct Solution : public Graph
 {
 protected:
 	// needed for a cyclic graph
 	std::vector<bool> visited;
 
 public:
-	BFS_Graph(int V) : Graph(V)
+	Solution(int V) : Graph(V)
 	{
 		visited.resize(V);
 		std::fill(visited.begin(), visited.end(), false);
@@ -86,14 +86,14 @@ public:
 	breadth_first_search_iterative(int);
 };
 
-void BFS_Graph::breadth_first_search_iterative(int source = 0)
+void Solution::breadth_first_search_iterative(int src = 0)
 {
 	std::cout << "BFS sequence : \n";
 	std::fill(visited.begin(), visited.end(), false);
 
 	std::queue<int> queue;
 
-	queue.push(source);
+	queue.push(src);
 	while (!queue.empty())
 	{
 		int curr_node = queue.front();
@@ -112,7 +112,7 @@ void BFS_Graph::breadth_first_search_iterative(int source = 0)
 
 int main()
 {
-	BFS_Graph go(6);
+	Solution go(6);
 
 	go.add_edge(0, 1);
 	go.add_edge(0, 2);

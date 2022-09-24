@@ -69,14 +69,14 @@ void Graph::add_edge(int u, int v)
 
 //-DFS-/
 
-struct DFS_Graph : public Graph
+struct Solution : public Graph
 {
 protected:
 	// needed for a cyclic graph
 	std::vector<bool> visited;
 
 public:
-	DFS_Graph(int V) : Graph(V)
+	Solution(int V) : Graph(V)
 	{
 		visited.resize(V);
 		std::fill(visited.begin(), visited.end(), false);
@@ -89,28 +89,28 @@ public:
 	depth_first_search_iterative(int);
 };
 
-void DFS_Graph::depth_first_search_recursive(int source = 0)
+void Solution::depth_first_search_recursive(int src = 0)
 {
-	if (!visited[source])
+	if (!visited[src])
 	{
-		visited[source] = true;
-		std::cout << "visited : " << source << "\n";
+		visited[src] = true;
+		std::cout << "visited : " << src << "\n";
 
-		for (auto itr = _graph[source].begin(); itr != _graph[source].end(); ++itr)
+		for (auto itr = _graph[src].begin(); itr != _graph[src].end(); ++itr)
 		{
 			depth_first_search_recursive(*itr);
 		}
 	}
 }
 
-void DFS_Graph::depth_first_search_iterative(int source = 0)
+void Solution::depth_first_search_iterative(int src = 0)
 {
 	std::cout << "Iterative DFS sequence : \n";
 	std::fill(visited.begin(), visited.end(), false);
 
 	std::stack<int> stack;
 
-	stack.push(source);
+	stack.push(src);
 	while (!stack.empty())
 	{
 		int curr_node = stack.top();
@@ -131,7 +131,7 @@ void DFS_Graph::depth_first_search_iterative(int source = 0)
 
 int main()
 {
-	DFS_Graph go(6);
+	Solution go(6);
 
 	go.add_edge(0, 2);
 	go.add_edge(0, 1);

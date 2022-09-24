@@ -6,7 +6,7 @@
 /*
 1-> implement Graph using array of list
 
-2-> Breadth first search
+2-> path between two nodes
 */
 
 struct Graph
@@ -60,9 +60,9 @@ void Graph::add_edge(int u, int v)
 	_graph[u].push_back(v);
 }
 
-struct HasPath : public Graph
+struct Solution : public Graph
 {
-	HasPath(int V) : Graph(V)
+	Solution(int V) : Graph(V)
 	{
 		visited.resize(V);
 	};
@@ -74,15 +74,15 @@ struct HasPath : public Graph
 	bool has_path_BFS(int, int);
 };
 
-bool HasPath::has_path_BFS(int source, int target)
+bool Solution::has_path_BFS(int src, int target)
 {
-	if (source == target)
+	if (src == target)
 		return true;
 
 	std::queue<node> queue;
 
-	queue.push(source);
-	visited[source] = true;
+	queue.push(src);
+	visited[src] = true;
 
 	while (!queue.empty())
 	{
@@ -102,16 +102,16 @@ bool HasPath::has_path_BFS(int source, int target)
 	return false;
 }
 
-bool HasPath::has_path_DFS(int source, int target)
+bool Solution::has_path_DFS(int src, int target)
 {
-	if (!visited[source])
+	if (!visited[src])
 	{
-		if (source == target)
+		if (src == target)
 			return true;
 
-		visited[source] = true;
+		visited[src] = true;
 
-		for (auto neighbrs = _graph[source].begin(); neighbrs != _graph[source].end(); ++neighbrs)
+		for (auto neighbrs = _graph[src].begin(); neighbrs != _graph[src].end(); ++neighbrs)
 		{
 			if (has_path_DFS(*neighbrs, target))
 				return true;
@@ -122,7 +122,7 @@ bool HasPath::has_path_DFS(int source, int target)
 
 int main()
 {
-	HasPath go(6);
+	Solution go(6);
 	/*
 		go.add_edge(0, 1);
 		go.add_edge(0, 2);

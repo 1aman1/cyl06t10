@@ -60,16 +60,16 @@ void graph::add_edge(int u, int v)
 	// adjacencyList[v].push_back(u);
 }
 
-bool graph::routeBetweenNode(int source, int target)
+bool graph::routeBetweenNode(int src, int target)
 {
-	if (source == target)
+	if (src == target)
 	{
 		return true;
 	}
 
 	std::queue<int> Q;
 
-	Q.emplace(source);
+	Q.emplace(src);
 	while (!Q.empty())
 	{
 		int top = Q.front();
@@ -111,11 +111,11 @@ int main()
 
 	go.print();
 
-	int source = 0;
+	int src = 0;
 	int target = 2;
 	std::cout << "route between nodes exists ? "
 			  << std::boolalpha
-			  << go.routeBetweenNode(source, target);
+			  << go.routeBetweenNode(src, target);
 
 	return 0;
 }

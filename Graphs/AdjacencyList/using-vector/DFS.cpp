@@ -57,9 +57,9 @@ void graph::add_edge(int u, int v)
 	// adjacencyList[v].push_back(u);
 }
 
-void graph::DFS(int source)
+void graph::DFS(int src)
 {
-	for (int i = source; i < vertices; ++i)
+	for (int i = src; i < vertices; ++i)
 	{
 		if (visited[i] == true)
 			continue;
