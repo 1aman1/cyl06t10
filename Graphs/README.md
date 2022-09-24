@@ -8,4 +8,6 @@ __tips__
 
 * visited lookup is not required for a Directed Acyclic Graph.
 
-* ALthough, wheneer there is a loop in the graph, it becomess necessary to use the visited lookup while traversing graph.
+* ALthough, cyclic graph, it becomes necessary to use the visited lookup while traversing graph.
+
+* for finding nodes or gathering shortest distances, it is beneficial to use BFS over DFS.
