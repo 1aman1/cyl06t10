@@ -2,15 +2,15 @@
 #include <vector>
 #include <list>
 #include <iterator>
-#include <queue>
+#include <stack>
 
 /*
 1-> implement Graph using array of list
 
-2-> Breadth first search
+2-> Depth first search
 */
 
-//-BFS-/
+//-DFS-/
 
 struct Graph
 {
@@ -19,7 +19,7 @@ public:
 
 protected:
 	graph_t *_graph;
-	int vertices;
+	int _vertices;
 
 public:
 	void
@@ -28,9 +28,9 @@ public:
 	void
 	add_edge(int, int);
 
-	Graph(int v) : vertices(v)
+	Graph(int v) : _vertices(v)
 	{
-		_graph = new graph_t[vertices];
+		_graph = new graph_t[_vertices];
 	}
 
 	~Graph()
@@ -41,7 +41,7 @@ public:
 
 void Graph::print()
 {
-	for (int node = 0; node < vertices; ++node)
+	for (int node = 0; node < _vertices; ++node)
 	{
 		std::cout << "vertex : " << node << " : ";
 		{
@@ -67,7 +67,7 @@ void Graph::add_edge(int u, int v)
 	// _graph[v].push_back(u);
 }
 
-//-BFS-/
+//-DFS-/
 
 struct Solution : public Graph
 {
@@ -83,21 +83,38 @@ public:
 	}
 
 	void
-	breadth_first_search_iterative(int);
+	depth_first_search_recursive(int);
+
+	void
+	depth_first_search_iterative(int);
 };
 
-void Solution::breadth_first_search_iterative(int src = 0)
+void Solution::depth_first_search_recursive(int src = 0)
 {
-	std::cout << "BFS sequence : \n";
+	if (!visited[src])
+	{
+		visited[src] = true;
+		std::cout << "visited : " << src << "\n";
+
+		for (auto itr = _graph[src].begin(); itr != _graph[src].end(); ++itr)
+		{
+			depth_first_search_recursive(*itr);
+		}
+	}
+}
+
+void Solution::depth_first_search_iterative(int src = 0)
+{
+	std::cout << "Iterative DFS sequence : \n";
 	std::fill(visited.begin(), visited.end(), false);
 
-	std::queue<int> queue;
+	std::stack<int> stack;
 
-	queue.push(src);
-	while (!queue.empty())
+	stack.push(src);
+	while (!stack.empty())
 	{
-		int curr_node = queue.front();
-		queue.pop();
+		int curr_node = stack.top();
+		stack.pop();
 
 		visited[curr_node] = true;
 		std::cout << "visited : " << curr_node << "\n";
@@ -105,35 +122,37 @@ void Solution::breadth_first_search_iterative(int src = 0)
 		for (auto itr = _graph[curr_node].begin(); itr != _graph[curr_node].end(); ++itr)
 		{
 			if (!visited[*itr])
-				queue.push(*itr);
+				stack.push(*itr);
 		}
 	}
+
+	std::fill(visited.begin(), visited.end(), false);
 }
 
 int main()
 {
 	Solution go(6);
 
-	go.add_edge(0, 1);
 	go.add_edge(0, 2);
+	go.add_edge(0, 1);
 	go.add_edge(1, 3);
 	go.add_edge(2, 4);
 	go.add_edge(3, 5);
 
-	/*
-		go.add_edge(0, 1);
-		go.add_edge(0, 4);
-		go.add_edge(0, 5);
-		go.add_edge(1, 3);
-		go.add_edge(1, 4);
-		go.add_edge(2, 1);
-		go.add_edge(3, 2);
-		go.add_edge(3, 4);
-	 */
+	// go.add_edge(0, 1);
+	// go.add_edge(0, 4);
+	// go.add_edge(0, 5);
+	// go.add_edge(1, 3);
+	// go.add_edge(1, 4);
+	// go.add_edge(2, 1);
+	// go.add_edge(3, 2);
+	// go.add_edge(3, 4);
 
 	go.print();
 
-	go.breadth_first_search_iterative();
+	go.depth_first_search_recursive();
+
+	go.depth_first_search_iterative();
 
 	return 0;
 }

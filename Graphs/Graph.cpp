@@ -1,20 +1,20 @@
 #include <iostream>
-#include <vector>
+#include <list>
 #include <iterator>
 #include <queue>
 
 /*
-1-> implement Graph using array of vector
+1-> implement Graph using array of list
 */
 
 struct Graph
 {
 public:
-	typedef std::vector<int> graph_t;
+	typedef std::list<int> graph_t;
 
 protected:
 	graph_t *_graph;
-	int vertices;
+	int _vertices;
 
 public:
 	void
@@ -23,9 +23,9 @@ public:
 	void
 	add_edge(int, int);
 
-	Graph(int v) : vertices(v)
+	Graph(int v) : _vertices(v)
 	{
-		_graph = new graph_t[vertices];
+		_graph = new graph_t[_vertices];
 	}
 
 	~Graph()
@@ -36,16 +36,18 @@ public:
 
 void Graph::print()
 {
-	for (int node = 0; node < vertices; ++node)
+	for (int node = 0; node < _vertices; ++node)
 	{
 		std::cout << "vertex : " << node << " : ";
 		{
-			// traverse neighbour for the current vertex
 			std::cout << "[ ";
+
+			// traverse neighbour for the current vertex
 			for (auto node_neighbrs = _graph[node].begin(); node_neighbrs != _graph[node].end(); ++node_neighbrs)
 			{
 				std::cout << *node_neighbrs << ", ";
 			}
+
 			std::cout << " ]" << std::endl;
 		}
 	}

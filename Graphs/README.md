@@ -11,3 +11,5 @@ __tips__
 * ALthough, cyclic graph, it becomes necessary to use the visited lookup while traversing graph.
 
 * for finding nodes or gathering shortest distances, it is beneficial to use BFS over DFS.
+
+* find more test graphs to evaluate algorithms present in sample file 'Z-sample-input-sets'

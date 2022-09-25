@@ -17,7 +17,7 @@ public:
 
 protected:
 	graph_t *_graph;
-	node_t vertices;
+	node_t _vertices;
 
 public:
 	void
@@ -26,9 +26,9 @@ public:
 	void
 	add_edge(int, int);
 
-	Graph(int v) : vertices(v)
+	Graph(int v) : _vertices(v)
 	{
-		_graph = new graph_t[vertices];
+		_graph = new graph_t[_vertices];
 	}
 
 	~Graph()
@@ -39,7 +39,7 @@ public:
 
 void Graph::print()
 {
-	for (int each_node = 0; each_node < vertices; ++each_node)
+	for (int each_node = 0; each_node < _vertices; ++each_node)
 	{
 		std::cout << "vertex : " << each_node << " : ";
 		{
@@ -61,14 +61,15 @@ void Graph::add_edge(int u, int v)
 	_graph[v].push_back(u);
 }
 
-struct Solution : public Graph
-{
-	Solution(int V) : Graph(V)
-	{
-		visited.resize(V);
-	};
 
-	std::vector<bool> visited;
+class Solution : public Graph
+{
+	std::vector<bool> _visited;
+
+public:
+	Solution(int V) : Graph(V) { _visited.resize(V); };
+
+	std::vector<bool> _visited;
 
 	int shortest_path(int, int);
 };
@@ -78,7 +79,7 @@ int Solution::shortest_path(int src, int target)
 	if (src == target)
 		return 0;
 
-	std::fill(visited.begin(), visited.end(), false);
+	std::fill(_visited.begin(), _visited.end(), false);
 	int node, distance;
 
 	std::queue<std::pair<int, int>> queue;
@@ -95,10 +96,10 @@ int Solution::shortest_path(int src, int target)
 		if (node == target)
 			return distance;
 
-		if (visited[node])
+		if (_visited[node])
 			continue;
 
-		visited[node] = true;
+		_visited[node] = true;
 
 		for (auto neighbours = _graph[node].begin(); neighbours != _graph[node].end(); ++neighbours)
 		{

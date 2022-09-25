@@ -17,7 +17,7 @@ public:
 
 protected:
 	graph_t *_graph;
-	node vertices;
+	node _vertices;
 
 public:
 	void
@@ -26,9 +26,9 @@ public:
 	void
 	add_edge(int, int);
 
-	Graph(int v) : vertices(v)
+	Graph(int v) : _vertices(v)
 	{
-		_graph = new graph_t[vertices];
+		_graph = new graph_t[_vertices];
 	}
 
 	~Graph()
@@ -39,7 +39,7 @@ public:
 
 void Graph::print()
 {
-	for (int each_node = 0; each_node < vertices; ++each_node)
+	for (int each_node = 0; each_node < _vertices; ++each_node)
 	{
 		std::cout << "vertex : " << each_node << " : ";
 		{
@@ -60,14 +60,12 @@ void Graph::add_edge(int u, int v)
 	_graph[u].push_back(v);
 }
 
-struct Solution : public Graph
+class Solution : public Graph
 {
-	Solution(int V) : Graph(V)
-	{
-		visited.resize(V);
-	};
+	std::vector<bool> _visited;
 
-	std::vector<bool> visited;
+public:
+	Solution(int V) : Graph(V) { _visited.resize(V); };
 
 	bool has_path_DFS(int, int);
 
@@ -82,12 +80,12 @@ bool Solution::has_path_BFS(int src, int target)
 	std::queue<node> queue;
 
 	queue.push(src);
-	visited[src] = true;
+	_visited[src] = true;
 
 	while (!queue.empty())
 	{
 		int curr_node = queue.front();
-		visited[curr_node] = true;
+		_visited[curr_node] = true;
 		queue.pop();
 
 		for (auto neighbrs = _graph[curr_node].begin(); neighbrs != _graph[curr_node].end(); ++neighbrs)
@@ -95,7 +93,7 @@ bool Solution::has_path_BFS(int src, int target)
 			if (*neighbrs == target)
 				return true;
 
-			if (!visited[*neighbrs])
+			if (!_visited[*neighbrs])
 				queue.push(*neighbrs);
 		}
 	}
@@ -104,12 +102,12 @@ bool Solution::has_path_BFS(int src, int target)
 
 bool Solution::has_path_DFS(int src, int target)
 {
-	if (!visited[src])
+	if (!_visited[src])
 	{
 		if (src == target)
 			return true;
 
-		visited[src] = true;
+		_visited[src] = true;
 
 		for (auto neighbrs = _graph[src].begin(); neighbrs != _graph[src].end(); ++neighbrs)
 		{

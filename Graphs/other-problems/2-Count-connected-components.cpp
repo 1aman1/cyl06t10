@@ -17,7 +17,7 @@ public:
 
 protected:
 	graph_t *_graph;
-	node vertices;
+	node _vertices;
 
 public:
 	void
@@ -26,9 +26,9 @@ public:
 	void
 	add_edge(int, int);
 
-	Graph(int v) : vertices(v)
+	Graph(int v) : _vertices(v)
 	{
-		_graph = new graph_t[vertices];
+		_graph = new graph_t[_vertices];
 	}
 
 	~Graph()
@@ -39,7 +39,7 @@ public:
 
 void Graph::print()
 {
-	for (int each_node = 0; each_node < vertices; ++each_node)
+	for (int each_node = 0; each_node < _vertices; ++each_node)
 	{
 		std::cout << "vertex : " << each_node << " : ";
 		{
@@ -61,14 +61,12 @@ void Graph::add_edge(int u, int v)
 	_graph[v].push_back(u);
 }
 
-struct Solution : public Graph
+class Solution : public Graph
 {
-	Solution(int V) : Graph(V)
-	{
-		visited.resize(V);
-	};
+	std::vector<bool> _visited;
 
-	std::vector<bool> visited;
+public:
+	Solution(int V) : Graph(V) { _visited.resize(V); };
 
 	int count_connected_components();
 
@@ -77,9 +75,9 @@ struct Solution : public Graph
 
 void Solution::depth_first_search_recursive(int src = 0)
 {
-	if (!visited[src])
+	if (!_visited[src])
 	{
-		visited[src] = true;
+		_visited[src] = true;
 
 		for (auto itr = _graph[src].begin(); itr != _graph[src].end(); ++itr)
 		{
@@ -91,9 +89,9 @@ void Solution::depth_first_search_recursive(int src = 0)
 int Solution::count_connected_components()
 {
 	int count = 0;
-	for (size_t i = 0; i < visited.size(); ++i)
+	for (size_t i = 0; i < _visited.size(); ++i)
 	{
-		if (!visited[i])
+		if (!_visited[i])
 		{
 			depth_first_search_recursive(i);
 			++count;
