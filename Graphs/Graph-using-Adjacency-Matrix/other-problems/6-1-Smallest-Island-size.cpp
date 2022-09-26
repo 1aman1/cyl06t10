@@ -25,25 +25,26 @@ public:
 
 Graph::~Graph()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        (*Row).resize(0);
+        (*eachRow).resize(0);
     }
+     _graph.resize(0);
 }
 
 void Graph::_build_graph()
 {
     _graph.resize(_row);
 
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
-        (*Row).resize(_col);
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
+        (*eachRow).resize(_col);
 }
 
 void Graph::print()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        for (auto Col = (*Row).begin(); Col != (*Row).end(); ++Col)
+        for (auto Col = (*eachRow).begin(); Col != (*eachRow).end(); ++Col)
         {
             std::cout << *Col << " ";
         }
@@ -73,11 +74,10 @@ public:
     smallest_island();
 
 private:
-    int this_island_size = 0;
     int min_island = 9999;
 
-    bool
-    explore_land(int, int);
+    int
+    _explore_land(int, int);
 
     void
     _build_visited();
@@ -87,8 +87,8 @@ void Solution::_build_visited()
 {
     _visited.resize(_row);
 
-    for (auto Row = _visited.begin(); Row != _visited.end(); ++Row)
-        (*Row).resize(_col);
+    for (auto eachRow = _visited.begin(); eachRow != _visited.end(); ++eachRow)
+        (*eachRow).resize(_col);
 }
 
 int Solution::smallest_island()
@@ -97,44 +97,39 @@ int Solution::smallest_island()
     {
         for (int c = 0; c < _col; ++c)
         {
-            if (explore_land(r, c))
-            {
-                min_island = std::min(min_island, this_island_size);
-
-                this_island_size = 0;
-            }
+            int size = _explore_land(r, c);
+            if (0 < size && size < min_island)
+                min_island = size;
         }
     }
-
     return min_island;
 }
 
-bool Solution::explore_land(int Row, int Col)
+int Solution::_explore_land(int Row, int Col)
 {
     bool rowCheck = 0 <= Row && Row < _row;
     bool colCheck = 0 <= Col && Col < _col;
 
     if (!rowCheck || !colCheck)
-        return false;
+        return 0;
 
     // check for water
     if (_graph[Row][Col] == false)
-        return false;
+        return 0;
 
     if (_visited[Row][Col])
-        return false;
+        return 0;
 
     _visited[Row][Col] = true;
-    ++this_island_size;
 
-    // tried to optimize when we found an island bigger than previous,in that case control doesn't need to continue calculating it's full size, we can pre-emptively return the control from there.
+    int size = 1;
 
-    explore_land(Row + 1, Col);
-    explore_land(Row - 1, Col);
-    explore_land(Row, Col + 1);
-    explore_land(Row, Col - 1);
+    size += _explore_land(Row + 1, Col);
+    size += _explore_land(Row - 1, Col);
+    size += _explore_land(Row, Col + 1);
+    size += _explore_land(Row, Col - 1);
 
-    return true;
+    return size;
 }
 
 int main()

@@ -29,9 +29,9 @@ private:
 
 Graph::~Graph()
 {
-    for (auto lens = _matrix.begin(); lens != _matrix.end(); ++lens)
+    for (auto eachRow = _matrix.begin(); eachRow != _matrix.end(); ++eachRow)
     {
-        (*lens).resize(0);
+        (*eachRow).resize(0);
     }
     _visited.resize(0);
 }
