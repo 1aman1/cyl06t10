@@ -24,17 +24,17 @@ public:
     insert(int);
 
 protected:
-    node_t *root;
+    node_t *_root;
 
     virtual node_t *
     _insertUtil(node_t *, int);
 };
 
-Tree::Tree() : root(nullptr) {}
+Tree::Tree() : _root(nullptr) {}
 
 void Tree::insert(int newData)
 {
-    root = _insertUtil(root, newData);
+    _root = _insertUtil(_root, newData);
 }
 
 node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
@@ -51,32 +51,39 @@ node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
     return curr_ptr;
 }
 
+//______SOLUTION_______//
+
 class Views : public Tree
 {
 private:
-    void _preOrderView(node_t *);
-
 public:
-    void preOrderView();
+    void level_list_view();
 };
 
-void Views::preOrderView()
+void Views::level_list_view()
 {
-    _preOrderView(root);
-}
+    std::queue<node_t *> queue;
 
-void Views::_preOrderView(node_t *curr_ptr)
-{
-    if (!curr_ptr)
+    node_t *tmp = _root;
+    queue.push(tmp);
+
+    while (!queue.empty())
     {
-        return;
+        tmp = queue.front();
+        queue.pop();
+
+        std::cout << tmp->data << "\t";
+
+        if (tmp->left)
+            queue.push(tmp->left);
+
+        if (tmp->right)
+            queue.push(tmp->right);
     }
-
-    std::cout << curr_ptr->data << "\t";
-
-    _preOrderView(curr_ptr->left);
-
-    _preOrderView(curr_ptr->right);
+    std::cout << std::endl;
+    
+    std::queue<node_t *> equeue;
+    queue.swap(equeue);
 }
 
 int main()
@@ -91,7 +98,7 @@ int main()
     tobj->insert(9);
     tobj->insert(11);
 
-    tobj->preOrderView();
+    tobj->level_list_view();
 
     return 0;
 }

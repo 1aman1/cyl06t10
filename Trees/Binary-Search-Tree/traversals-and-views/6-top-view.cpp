@@ -2,13 +2,17 @@
 #include <map>
 #include <queue>
 
-//
+/*
+includes an alteration to the tree node type
+horizontal distance variable is included for top view
+ */
 
 struct node
 {
     int data;
-    int h_dist = 0;
     node *left, *right;
+
+    int h_dist = 0;
 
     node() = delete;
 
@@ -74,6 +78,8 @@ Tree::_insertUtility(node *curr_node, int newData)
     return curr_node;
 }
 
+//______SOLUTION_______//
+
 class View_utility : public Tree
 {
 
@@ -101,8 +107,8 @@ void View_utility::topview()
     {
         h_dist = curr_node->h_dist;
 
-        // if (!map.count(h_dist))
-        map[h_dist] = curr_node->data;
+        if (!map.count(h_dist))
+            map[h_dist] = curr_node->data;
 
         if (curr_node->left)
         {

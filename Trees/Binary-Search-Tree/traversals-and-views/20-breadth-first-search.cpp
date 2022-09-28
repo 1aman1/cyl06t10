@@ -1,6 +1,5 @@
 #include <iostream>
 #include <queue>
-#include <list>
 
 struct node_t
 {
@@ -51,32 +50,37 @@ node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
     return curr_ptr;
 }
 
+//______SOLUTION_______//
+
 class Views : public Tree
 {
-private:
-    void _postOrderView(node_t *);
-
 public:
-    void postOrderView();
+    void breadth_first_search();
 };
 
-void Views::postOrderView()
+void Views::breadth_first_search()
 {
-    _postOrderView(root);
-}
-
-void Views::_postOrderView(node_t *curr_ptr)
-{
-    if (!curr_ptr)
-    {
+    if (root == nullptr)
         return;
+
+    std::queue<node_t *> queue;
+
+    queue.push(root);
+
+    while (!queue.empty())
+    {
+        node_t *tmp = queue.front();
+        queue.pop();
+
+        std::cout << tmp->data << " ";
+
+        if (tmp->left)
+            queue.push(tmp->left);
+        if (tmp->right)
+            queue.push(tmp->right);
     }
 
-    _postOrderView(curr_ptr->left);
-
-    _postOrderView(curr_ptr->right);
-
-    std::cout << curr_ptr->data << "\t";
+    std::cout << "\n";
 }
 
 int main()
@@ -86,12 +90,14 @@ int main()
     Views *tobj = new Views();
 
     tobj->insert(7);
-    tobj->insert(5);
     tobj->insert(3);
+    tobj->insert(5);
+    tobj->insert(1);
     tobj->insert(9);
+    tobj->insert(10);
     tobj->insert(11);
 
-    tobj->postOrderView();
+    tobj->breadth_first_search();
 
     return 0;
 }

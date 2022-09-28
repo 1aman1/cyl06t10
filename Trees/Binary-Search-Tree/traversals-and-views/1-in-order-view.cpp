@@ -51,6 +51,8 @@ node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
     return curr_ptr;
 }
 
+//______SOLUTION_______//
+
 class Views : public Tree
 {
 private:
@@ -86,9 +88,11 @@ int main()
     Views *tobj = new Views();
 
     tobj->insert(7);
-    tobj->insert(5);
     tobj->insert(3);
+    tobj->insert(5);
+    tobj->insert(1);
     tobj->insert(9);
+    tobj->insert(10);
     tobj->insert(11);
 
     tobj->inOrderView();

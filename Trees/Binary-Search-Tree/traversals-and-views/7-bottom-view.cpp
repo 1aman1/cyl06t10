@@ -1,9 +1,13 @@
 #include <iostream>
-#include <list>
+#include <map>
+#include <queue>
+
+//
 
 struct node
 {
     int data;
+    int h_dist = 0;
     node *left, *right;
 
     node() = delete;
@@ -17,9 +21,6 @@ class Tree
 {
 protected:
     node *_root;
-
-public:
-    typedef std::list<node *> list;
 
 public:
     Tree() : _root(nullptr){};
@@ -73,74 +74,59 @@ Tree::_insertUtility(node *curr_node, int newData)
     return curr_node;
 }
 
-// left view =========================
+//______SOLUTION_______//
 
 class View_utility : public Tree
 {
 
 public:
-    // iterative
-    void
-    left_view_1();
-
-    // recursive
-    void
-    left_view_2();
+    void topview();
 
 private:
-    void
-    _left_view_util(node *, int, int &);
 };
 
-void View_utility::left_view_1()
+void View_utility::topview()
 {
-    list parent = {_root};
-    list current;
+    if (!_root)
+        return;
 
-    std::cout << "Left view : ";
+    node *curr_node = _root;
 
-    while (!parent.empty())
+    int h_dist = 0;
+    curr_node->h_dist = 0;
+
+    std::map<int, int> map;
+    std::queue<node *> queue;
+
+    queue.push(curr_node);
+    while (!queue.empty())
     {
-        std::cout << parent.front()->data << "\n";
+        h_dist = curr_node->h_dist;
 
-        for (auto itr = parent.begin(); itr != parent.end(); ++itr)
+        // if (!map.count(h_dist))
+        map[h_dist] = curr_node->data;
+
+        if (curr_node->left)
         {
-            if ((*itr)->left)
-                current.push_back((*itr)->left);
-            if ((*itr)->right)
-                current.push_back((*itr)->right);
+            curr_node->left->h_dist = h_dist - 1;
+            queue.push(curr_node->left);
         }
 
-        parent.swap(current);
-        current.clear();
+        if (curr_node->right)
+        {
+            curr_node->right->h_dist = h_dist + 1;
+            queue.push(curr_node->right);
+        }
+
+        queue.pop();
+        curr_node = queue.front();
     }
-}
 
-void View_utility::left_view_2()
-{
-    int curr_level = 1;
-    int last_printed_level = 0;
-
-    // print the right view
-    _left_view_util(_root, curr_level, last_printed_level);
-}
-
-void View_utility::_left_view_util(node *curr_ptr, int curr_level, int &last_printed_level)
-{
-    // if curr_ptr is null, there is nothing to do
-    if (curr_ptr == nullptr)
+    for (auto &i : map)
     {
-        return;
+        // std::cout << i.first << " : ";
+        std::cout << i.second << "\n";
     }
-
-    if (curr_level > last_printed_level)
-    {
-        std::cout << curr_ptr->data << " \n";
-        last_printed_level = curr_level;
-    }
-
-    _left_view_util(curr_ptr->left, curr_level + 1, last_printed_level);
-    _left_view_util(curr_ptr->right, curr_level + 1, last_printed_level);
 }
 
 int main()
@@ -169,10 +155,7 @@ int main()
     obj.insert(2700);
 
     // obj.view_in_order();
-
-    obj.left_view_1();
-
-    obj.left_view_2();
+    obj.topview();
 
     return 0;
 }

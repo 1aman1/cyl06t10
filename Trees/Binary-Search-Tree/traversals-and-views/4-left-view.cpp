@@ -73,35 +73,33 @@ Tree::_insertUtility(node *curr_node, int newData)
     return curr_node;
 }
 
-// right view =========================
+//______SOLUTION_______//
 
 class View_utility : public Tree
 {
 
 public:
-    // iterative
     void
-    right_view_1();
+    left_view_iterative();
 
-    // recursive
     void
-    right_view_2();
+    left_view_recursive();
 
 private:
     void
-    _right_view_util(node *, int, int &);
+    _left_view_recursive_util(node *, int, int &);
 };
 
-void View_utility::right_view_1()
+void View_utility::left_view_iterative()
 {
     list parent = {_root};
     list current;
 
-    std::cout << "Right view : ";
+    std::cout << "Left view : \n";
 
     while (!parent.empty())
     {
-        std::cout << parent.back()->data << "\n";
+        std::cout << parent.front()->data << "\n";
 
         for (auto itr = parent.begin(); itr != parent.end(); ++itr)
         {
@@ -116,16 +114,16 @@ void View_utility::right_view_1()
     }
 }
 
-void View_utility::right_view_2()
+void View_utility::left_view_recursive()
 {
     int curr_level = 1;
     int last_printed_level = 0;
 
-    // print the right view
-    _right_view_util(_root, curr_level, last_printed_level);
+    // print the left view
+    _left_view_recursive_util(_root, curr_level, last_printed_level);
 }
 
-void View_utility::_right_view_util(node *curr_ptr, int curr_level, int &last_printed_level)
+void View_utility::_left_view_recursive_util(node *curr_ptr, int curr_level, int &last_printed_level)
 {
     // if curr_ptr is null, there is nothing to do
     if (curr_ptr == nullptr)
@@ -133,14 +131,14 @@ void View_utility::_right_view_util(node *curr_ptr, int curr_level, int &last_pr
         return;
     }
 
-    if (curr_level > last_printed_level)
+    if (last_printed_level < curr_level)
     {
         std::cout << curr_ptr->data << " \n";
         last_printed_level = curr_level;
     }
 
-    _right_view_util(curr_ptr->right, curr_level + 1, last_printed_level);
-    _right_view_util(curr_ptr->left, curr_level + 1, last_printed_level);
+    _left_view_recursive_util(curr_ptr->left, curr_level + 1, last_printed_level);
+    _left_view_recursive_util(curr_ptr->right, curr_level + 1, last_printed_level);
 }
 
 int main()
@@ -149,30 +147,30 @@ int main()
     View_utility obj;
 
     // CASE - 1
-    // obj.insert(15);
-    // obj.insert(5);
-    // obj.insert(1);
-    // obj.insert(10);
-    // obj.insert(14);
+    obj.insert(15);
+    obj.insert(5);
+    obj.insert(1);
+    obj.insert(10);
+    obj.insert(14);
 
     // CASE -2
-    obj.insert(1000);
-    obj.insert(500);
-    obj.insert(700);
-    obj.insert(300);
-    obj.insert(400);
-    obj.insert(360);
-    obj.insert(330);
-    obj.insert(2000);
-    obj.insert(3000);
-    obj.insert(2500);
-    obj.insert(2700);
+    // obj.insert(1000);
+    // obj.insert(500);
+    // obj.insert(700);
+    // obj.insert(300);
+    // obj.insert(400);
+    // obj.insert(360);
+    // obj.insert(330);
+    // obj.insert(2000);
+    // obj.insert(3000);
+    // obj.insert(2500);
+    // obj.insert(2700);
 
     // obj.view_in_order();
 
-    obj.right_view_1();
+    // obj.left_view_iterative();
 
-    obj.right_view_2();
+    obj.left_view_recursive();
 
     return 0;
 }

@@ -24,17 +24,17 @@ public:
     insert(int);
 
 protected:
-    node_t *_root;
+    node_t *root;
 
     virtual node_t *
     _insertUtil(node_t *, int);
 };
 
-Tree::Tree() : _root(nullptr) {}
+Tree::Tree() : root(nullptr) {}
 
 void Tree::insert(int newData)
 {
-    _root = _insertUtil(_root, newData);
+    root = _insertUtil(root, newData);
 }
 
 node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
@@ -51,52 +51,77 @@ node_t *Tree::_insertUtil(node_t *curr_ptr, int newData)
     return curr_ptr;
 }
 
-class Views : public Tree
+//______SOLUTION_______//
+
+class Solution : public Tree
 {
-private:
+    int tree_value_recursive(node_t *);
+
 public:
-    void level_list_view();
+    int tree_value_recursive();
+
+    int tree_value_iterative();
 };
 
-void Views::level_list_view()
+int Solution::tree_value_iterative()
 {
-    std::queue<node_t *> queue;
+    if (root == nullptr)
+        return 0;
 
-    node_t *tmp = _root;
-    queue.push(tmp);
+    std::queue<node_t *> queue;
+    int Sum = root->data;
+
+    queue.push(root);
 
     while (!queue.empty())
     {
-        tmp = queue.front();
+        node_t *tmp = queue.front();
         queue.pop();
 
-        std::cout << tmp->data << "\t";
-
         if (tmp->left)
+        {
+            Sum += tmp->left->data;
             queue.push(tmp->left);
-
+        }
         if (tmp->right)
+        {
+            Sum += tmp->right->data;
             queue.push(tmp->right);
+        }
     }
-    std::cout << std::endl;
-    
-    std::queue<node_t *> equeue;
-    queue.swap(equeue);
+
+    return Sum;
+}
+
+int Solution::tree_value_recursive()
+{
+    return tree_value_recursive(root);
+}
+
+int Solution::tree_value_recursive(node_t *curr_node)
+{
+    if (curr_node == nullptr)
+        return 0;
+
+    return (curr_node->data +
+            tree_value_recursive(curr_node->left) +
+            tree_value_recursive(curr_node->right));
 }
 
 int main()
 {
     std::cout << "Building " << __FILE__ << std::endl;
 
-    Views *tobj = new Views();
+    Solution *tobj = new Solution();
 
     tobj->insert(7);
-    tobj->insert(5);
     tobj->insert(3);
-    tobj->insert(9);
-    tobj->insert(11);
+    tobj->insert(10);
+    tobj->insert(80);
+    tobj->insert(100);
 
-    tobj->level_list_view();
+    std::cout << tobj->tree_value_recursive() << "\n";
+    std::cout << tobj->tree_value_iterative() << "\n";
 
     return 0;
 }
