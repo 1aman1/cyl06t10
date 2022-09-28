@@ -16,13 +16,16 @@ A. Content Structure of each directory
    
 B. Data Structures
    * Array
-   * Graph
-   * Linkedlist
-   * Mathematics
-   * Queues
-   * Stack
    * String
+   * Stack
+   * Queues
+   * Linkedlist
+   * Graph
    * Tree
+
+C. Essential Topics like
+   * Mathematics
+   * Bit Manipulation
    
 ***
 
