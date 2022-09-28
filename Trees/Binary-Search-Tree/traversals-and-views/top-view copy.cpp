@@ -74,6 +74,8 @@ Tree::_insertUtility(node *curr_node, int newData)
     return curr_node;
 }
 
+//______SOLUTION_______//
+
 class View_utility : public Tree
 {
 

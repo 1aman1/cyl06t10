@@ -1,13 +1,9 @@
 #include <iostream>
-#include <map>
-#include <queue>
-
-// 
+#include <list>
 
 struct node
 {
     int data;
-    int h_dist = 0;
     node *left, *right;
 
     node() = delete;
@@ -21,6 +17,9 @@ class Tree
 {
 protected:
     node *_root;
+
+public:
+    typedef std::list<node *> list;
 
 public:
     Tree() : _root(nullptr){};
@@ -74,57 +73,72 @@ Tree::_insertUtility(node *curr_node, int newData)
     return curr_node;
 }
 
+//______SOLUTION_______//
+
 class View_utility : public Tree
 {
 
 public:
-    void topview();
+    void
+    right_view_iterative();
+
+    void
+    right_view_recursive();
 
 private:
+    void
+    _right_view_recursive_util(node *, int, int &);
 };
 
-void View_utility::topview()
+void View_utility::right_view_iterative()
 {
-    if (!_root)
+    list parent = {_root};
+    list current;
+
+    std::cout << "Right view :\n";
+
+    while (!parent.empty())
+    {
+        std::cout << parent.back()->data << "\n";
+
+        for (auto itr = parent.begin(); itr != parent.end(); ++itr)
+        {
+            if ((*itr)->left)
+                current.push_back((*itr)->left);
+            if ((*itr)->right)
+                current.push_back((*itr)->right);
+        }
+
+        parent.swap(current);
+        current.clear();
+    }
+}
+
+void View_utility::right_view_recursive()
+{
+    int curr_level = 1;
+    int last_printed_level = 0;
+
+    // print the right view
+    _right_view_recursive_util(_root, curr_level, last_printed_level);
+}
+
+void View_utility::_right_view_recursive_util(node *curr_ptr, int curr_level, int &last_printed_level)
+{
+    // if curr_ptr is null, there is nothing to do
+    if (curr_ptr == nullptr)
+    {
         return;
-
-    node *curr_node = _root;
-
-    int h_dist = 0;
-    curr_node->h_dist = 0;
-
-    std::map<int, int> map;
-    std::queue<node *> queue;
-
-    queue.push(curr_node);
-    while (!queue.empty())
-    {
-        h_dist = curr_node->h_dist;
-
-        if (!map.count(h_dist))
-            map[h_dist] = curr_node->data;
-
-        if (curr_node->left)
-        {
-            curr_node->left->h_dist = h_dist - 1;
-            queue.push(curr_node->left);
-        }
-
-        if (curr_node->right)
-        {
-            curr_node->right->h_dist = h_dist + 1;
-            queue.push(curr_node->right);
-        }
-
-        queue.pop();
-        curr_node = queue.front();
     }
 
-    for (auto &i : map)
+    if (last_printed_level < curr_level)
     {
-        // std::cout << i.first << " : ";
-        std::cout << i.second << "\n";
+        std::cout << curr_ptr->data << " \n";
+        last_printed_level = curr_level;
     }
+
+    _right_view_recursive_util(curr_ptr->right, curr_level + 1, last_printed_level);
+    _right_view_recursive_util(curr_ptr->left, curr_level + 1, last_printed_level);
 }
 
 int main()
@@ -153,7 +167,10 @@ int main()
     obj.insert(2700);
 
     // obj.view_in_order();
-    obj.topview();
+
+    obj.right_view_iterative();
+
+    obj.right_view_recursive();
 
     return 0;
 }
