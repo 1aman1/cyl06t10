@@ -20,8 +20,9 @@ B. Data Structures
    * Stack
    * Queues
    * Linkedlist
-   * Graph
    * Tree
+   * Graph
+   * Heaps
 
 C. Essential Topics like
    * Mathematics
