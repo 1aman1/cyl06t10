@@ -18,7 +18,7 @@ struct node_t
     node_t(int v) : data(v), next(nullptr){};
 };
 
-class list_t
+struct list_t
 {
 public:
     list_t() { head = nullptr; };
@@ -34,31 +34,8 @@ public:
 
     node_t *head;
 
-private:
     int size = 0;
 };
-
-void list_t::remove_kth_from_back(int pos)
-{
-    node_t *slow = head;
-    node_t *fast = head;
-
-    while (pos >= 0)
-    {
-        --pos;
-        fast = fast->next;
-    }
-
-    while (fast)
-    {
-        fast = fast->next;
-        slow = slow->next;
-    }
-
-    node_t *tmp = slow->next;
-    slow->next = slow->next->next;
-    delete tmp;
-}
 
 void list_t::print()
 {
@@ -89,6 +66,30 @@ void list_t::insert(int newData)
     ++size;
 }
 
+//_____SOLUTION______//
+
+void list_t::remove_kth_from_back(int pos)
+{
+    node_t *slow = head;
+    node_t *fast = head;
+
+    while (pos >= 0)
+    {
+        --pos;
+        fast = fast->next;
+    }
+
+    while (fast)
+    {
+        fast = fast->next;
+        slow = slow->next;
+    }
+
+    node_t *tmp = slow->next;
+    slow->next = slow->next->next;
+    delete tmp;
+}
+
 int main()
 {
 
@@ -96,7 +97,6 @@ int main()
 
     for (int i = 50; i > 0; i -= 5)
     {
-
         obj.insert(i);
     }
 

@@ -29,7 +29,7 @@ public:
     insert(int);
 
     void
-    pop();
+    remove();
 
     void
     print();
@@ -43,7 +43,7 @@ int list_t::get_size()
     return size;
 }
 
-void list_t::pop()
+void list_t::remove()
 {
     node_t *head_hook = head;
     head = head->next;
@@ -87,17 +87,17 @@ int main()
     list_interface.insert(1);
     list_interface.print();
 
-    list_interface.pop();
+    list_interface.remove();
     list_interface.print();
 
     list_interface.insert(2);
     list_interface.insert(1);
     list_interface.print();
 
-    list_interface.pop();
+    list_interface.remove();
     list_interface.print();
 
-    list_interface.pop();
+    list_interface.remove();
     list_interface.print();
 
     return 0;
