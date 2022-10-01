@@ -13,26 +13,20 @@ class Solution
 public:
     ListNode *middleNode(ListNode *head)
     {
+        ListNode *PSlow_x = head;
+        ListNode *PFast_2x = head;
 
-        ListNode *singleSpeedPtr = head;
-        ListNode *doubleSpeedPtr = head;
-
-        while (doubleSpeedPtr->next && doubleSpeedPtr->next->next)
+        while (PFast_2x && PFast_2x->next && PFast_2x->next->next)
         {
-
-            // singleSpeedPtr moves one step at a time
-            singleSpeedPtr = singleSpeedPtr->next;
-
-            //  doubleSpeedPtr moves two steps at a time
-            doubleSpeedPtr = doubleSpeedPtr->next->next;
+            PSlow_x = PSlow_x->next;
+            PFast_2x = PFast_2x->next->next;
         }
 
-        if (doubleSpeedPtr->next)
+        if (PFast_2x->next)
         {
-            // when the length is even, adjust the singleSpeedPtr one more step ahead.
-            singleSpeedPtr = singleSpeedPtr->next;
+            PSlow_x = PSlow_x->next;
         }
 
-        return singleSpeedPtr;
+        return PSlow_x;
     }
 };
