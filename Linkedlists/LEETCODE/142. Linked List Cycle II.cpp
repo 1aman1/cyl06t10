@@ -11,40 +11,31 @@ class Solution
 public:
     ListNode *detectCycle(ListNode *head)
     {
-        // set two pointers in list, singleStepPtr, DoubleStepPtr
-        // they will collide before pointing to null, if the list is circular
-        // otherwise, loop will brreak.
-
-        // incase head empty
         if (head == nullptr || head->next == nullptr)
-        {
             return nullptr;
-        }
 
-        ListNode *singleStepPtr, *doubleStepPtr;
+        ListNode *PSlow_x, *PFast_2x;
 
-        singleStepPtr = doubleStepPtr = head;
+        PSlow_x = PFast_2x = head;
 
-        while (doubleStepPtr && doubleStepPtr->next && doubleStepPtr->next->next)
+        while (PFast_2x && PFast_2x->next && PFast_2x->next->next)
         {
-
-            singleStepPtr = singleStepPtr->next;
-            doubleStepPtr = doubleStepPtr->next->next;
+            PSlow_x = PSlow_x->next;
+            PFast_2x = PFast_2x->next->next;
 
             // they will collide before pointing to null, if the list is circular
-            if (singleStepPtr == doubleStepPtr)
+            if (PSlow_x == PFast_2x)
             {
-
                 // start another single step pointer from head
                 ListNode *PtrFromHead = head;
 
-                while (singleStepPtr != PtrFromHead)
+                while (PSlow_x != PtrFromHead)
                 {
-                    singleStepPtr = singleStepPtr->next;
+                    PSlow_x = PSlow_x->next;
                     PtrFromHead = PtrFromHead->next;
                 }
 
-                return singleStepPtr;
+                return PSlow_x;
             }
         }
         return nullptr;
