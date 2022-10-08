@@ -25,25 +25,26 @@ public:
 
 Graph::~Graph()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        (*Row).resize(0);
+        (*eachRow).resize(0);
     }
+     _graph.resize(0);
 }
 
 void Graph::_build_graph()
 {
     _graph.resize(_row);
 
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
-        (*Row).resize(_col);
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
+        (*eachRow).resize(_col);
 }
 
 void Graph::print()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        for (auto Col = (*Row).begin(); Col != (*Row).end(); ++Col)
+        for (auto Col = (*eachRow).begin(); Col != (*eachRow).end(); ++Col)
         {
             std::cout << *Col << " ";
         }
@@ -74,7 +75,7 @@ public:
 
 private:
     bool
-    explore_land(int, int);
+    _explore_land(int, int);
 
     void
     _build_visited();
@@ -84,8 +85,8 @@ void Solution::_build_visited()
 {
     _visited.resize(_row);
 
-    for (auto Row = _visited.begin(); Row != _visited.end(); ++Row)
-        (*Row).resize(_col);
+    for (auto eachRow = _visited.begin(); eachRow != _visited.end(); ++eachRow)
+        (*eachRow).resize(_col);
 }
 
 int Solution::get_island_count()
@@ -96,7 +97,7 @@ int Solution::get_island_count()
     {
         for (int c = 0; c < _col; ++c)
         {
-            if (explore_land(r, c))
+            if (_explore_land(r, c))
             {
                 ++total_islands;
             }
@@ -106,7 +107,7 @@ int Solution::get_island_count()
     return total_islands;
 }
 
-bool Solution::explore_land(int Row, int Col)
+bool Solution::_explore_land(int Row, int Col)
 {
     bool rowCheck = 0 <= Row && Row < _row;
     bool colCheck = 0 <= Col && Col < _col;
@@ -123,10 +124,10 @@ bool Solution::explore_land(int Row, int Col)
 
     _visited[Row][Col] = true;
 
-    explore_land(Row + 1, Col);
-    explore_land(Row - 1, Col);
-    explore_land(Row, Col + 1);
-    explore_land(Row, Col - 1);
+    _explore_land(Row + 1, Col);
+    _explore_land(Row - 1, Col);
+    _explore_land(Row, Col + 1);
+    _explore_land(Row, Col - 1);
 
     return true;
 }
