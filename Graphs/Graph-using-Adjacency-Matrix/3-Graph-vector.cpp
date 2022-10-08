@@ -6,13 +6,13 @@
 class Graph
 {
     std::vector<std::vector<bool>> _graph;
-    int row, col;
+    int _row, _col;
 
     void
     _build_graph();
 
 public:
-    Graph(int Row, int Col) : row(Row), col(Col) { _build_graph(); }
+    Graph(int Row, int Col) : _row(Row), _col(Col) { _build_graph(); }
 
     ~Graph();
 
@@ -24,25 +24,26 @@ public:
 
 Graph::~Graph()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        (*Row).resize(0);
+        (*eachRow).resize(0);
     }
+    _graph.resize(0);
 }
 
 void Graph::_build_graph()
 {
-    _graph.resize(row);
+    _graph.resize(_row);
 
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
-        (*Row).resize(col);
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
+        (*eachRow).resize(_col);
 }
 
 void Graph::print()
 {
-    for (auto Row = _graph.begin(); Row != _graph.end(); ++Row)
+    for (auto eachRow = _graph.begin(); eachRow != _graph.end(); ++eachRow)
     {
-        for (auto Col = (*Row).begin(); Col != (*Row).end(); ++Col)
+        for (auto Col = (*eachRow).begin(); Col != (*eachRow).end(); ++Col)
         {
             std::cout << *Col << " ";
         }
@@ -60,10 +61,10 @@ void Graph::fill(std::vector<std::vector<int>> &connections)
 
 int main()
 {
-    int row = 4;
-    int col = 4;
+    int _row = 4;
+    int _col = 4;
 
-    Graph obj(row, col);
+    Graph obj(_row, _col);
 
     std::vector<std::vector<int>> connections{{0, 1},
                                               {1, 2},

@@ -6,14 +6,14 @@ class Solution
 public:
     void reverseString(std::vector<char> &s)
     {
-        int len = s.size();
-        for (int i = 0; i < len / 2; ++i)
+        int len = s.size() - 1;
+        for (int i = 0; i <= len / 2; ++i)
         {
-            if (s[i] != s[len - 1 - i])
+            if (s[i] != s[len - i])
             {
                 char tmp = s[i];
-                s[i] = s[len - 1 - i];
-                s[len - 1 - i] = tmp;
+                s[i] = s[len - i];
+                s[len - i] = tmp;
             }
         }
     }
