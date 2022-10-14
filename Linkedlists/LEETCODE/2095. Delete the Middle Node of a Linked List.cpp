@@ -1,14 +1,3 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
-
 class Solution
 {
 public:
@@ -16,35 +5,29 @@ public:
     {
         if (head != nullptr && head->next != nullptr)
         {
-            ListNode *singleSpeedPtr = head;
-            ListNode *doubleSpeedPtr = head;
+            // >
+            ListNode *PSlow_x = head;
+            ListNode *PFast_2x = head;
 
-            while (doubleSpeedPtr->next && doubleSpeedPtr->next->next)
+            while (PFast_2x->next && PFast_2x->next->next)
             {
-
-                // singleSpeedPtr moves one step at a time
-                singleSpeedPtr = singleSpeedPtr->next;
-
-                //  doubleSpeedPtr moves two steps at a time
-                doubleSpeedPtr = doubleSpeedPtr->next->next;
+                PSlow_x = PSlow_x->next;
+                PFast_2x = PFast_2x->next->next;
             }
 
-            if (doubleSpeedPtr->next)
+            if (PFast_2x->next)
             {
-                // when the length is even, adjust the singleSpeedPtr one more step ahead.
-                singleSpeedPtr = singleSpeedPtr->next;
+                PSlow_x = PSlow_x->next;
             }
 
-            // singleSpeedPtr now points to the middle node,
-            // Deletion below
+            // >
+            ListNode *tmp = head;
 
-            ListNode *temp = head;
+            while (tmp->next != PSlow_x)
+                tmp = tmp->next;
 
-            while (temp->next != singleSpeedPtr)
-                temp = temp->next;
-
-            temp->next = singleSpeedPtr->next;
-            delete singleSpeedPtr;
+            tmp->next = PSlow_x->next;
+            delete PSlow_x;
 
             return head;
         }
