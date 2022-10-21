@@ -10,18 +10,17 @@ class Solution
 public:
     vector<int> twoSum(vector<int> &array, int target)
     {
-        // store value with it's index
-        std::unordered_map<int, int> lookup;
-        for (int i = 0; i < array.size(); ++i)
+        int left = 0;
+        int right = array.size() - 1;
+
+        while (array[left] + array[right] != target)
         {
-            int leftover = target - array[i];
-            if (lookup.find(leftover) != lookup.end())
-            {
-                return {lookup.at(leftover) + 1, i + 1};
-            }
-            lookup.insert({array[i], i});
+            if (array[left] + array[right] > target)
+                --right;
+            else
+                ++left;
         }
-        return {};
+        return {left + 1, right + 1};
     }
 };
 
