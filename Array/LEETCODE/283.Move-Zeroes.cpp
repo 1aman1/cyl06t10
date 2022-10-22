@@ -9,19 +9,17 @@ class Solution
 public:
     void moveZeroes(vector<int> &nums)
     {
+        const int SIZE = nums.size();
         int last_non_zero = 0;
 
-        int size = nums.size();
-        for (int i = 0; i < size; ++i)
+        for (int i = 0; i < SIZE; ++i)
         {
             if (nums[i] != 0)
-            {
-                nums[last_non_zero] = nums[i];
-                ++last_non_zero;
-            }
+                nums[last_non_zero++] = nums[i];
         }
-        for (; last_non_zero < size; ++last_non_zero)
-            nums[last_non_zero] = 0;
+
+        while (last_non_zero < SIZE)
+            nums[last_non_zero++] = 0;
     }
 };
 

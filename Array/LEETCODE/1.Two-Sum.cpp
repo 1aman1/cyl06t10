@@ -4,25 +4,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
-class debugUtil
-{
-    bool DEBUGLOG;
-
-public:
-    debugUtil(){};
-
-    void setDebugTrue()
-    {
-        DEBUGLOG = true;
-    }
-
-    bool ifDEBUGLOG()
-    {
-        return DEBUGLOG;
-    }
-};
-
-class Solution : public debugUtil
+class Solution
 {
 public:
     void print();
@@ -119,12 +101,6 @@ void Solution::print()
 int main(int argc, char **argv)
 {
     Solution obj;
-
-    if (argc == 2)
-    {
-        if ("true" == static_cast<std::string>(*(argv + 1)))
-            obj.setDebugTrue();
-    }
 
     obj.array = {3, 2, 4};
     obj.print();

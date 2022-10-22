@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+class Solution
+{
+public:
+    int search(vector<int> &nums, int target)
+    {
+        int left = 0;
+        int right = nums.size() - 1;
+
+        while (left <= right)
+        {
+            const int mid = (left + right) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+            if (nums[left] <= nums[mid])
+            {
+                if (nums[left] <= target && target < nums[mid])
+                    right = mid - 1;
+                else
+                    left = mid + 1;
+            }
+            else
+            {
+                if (nums[mid] < target && target <= nums[right])
+                    left = mid + 1;
+                else
+                    right = mid - 1;
+            }
+        }
+
+        return -1;
+    }
+};
+
+// class Solution2
+// {
+// public:
+//     int search(std::vector<int> &nums, int target)
+//     {
+//         auto searchResult = std::find(nums.begin(), nums.end(), target);
+
+//         if (searchResult == nums.end())
+//             return -1;
+//         else
+//             return std::distance(begin(nums), searchResult);
+//     }
+// };
+
+int main()
+{
+    std::vector<int> vec = {4, 5, 6, 7, 0, 1, 2};
+    Solution obj;
+
+    std::cout << obj.search(vec, 0)
+              << std::endl;
+
+    return 0;
+}

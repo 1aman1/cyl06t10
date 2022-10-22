@@ -21,9 +21,7 @@ public:
 
             prev_k_sum = curr_sum_k;
             if (std::binary_search(itr + 1, nums.end(), curr_sum_k))
-            {
                 ++countPairs;
-            }
         }
 
         return countPairs;

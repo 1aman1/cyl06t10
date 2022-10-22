@@ -6,7 +6,7 @@
 class Solution
 {
 public:
-    static int customCompare(const std::pair<int, int> &a, const std::pair<int, int> &b)
+    static bool customCompare(const std::pair<int, int> &a, const std::pair<int, int> &b)
     {
         return a.second > b.second;
     }
