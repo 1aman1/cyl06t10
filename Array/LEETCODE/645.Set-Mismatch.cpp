@@ -2,6 +2,7 @@
 #include <vector>
 
 using namespace std;
+
 class Solution
 {
 public:
@@ -20,7 +21,7 @@ public:
         for (int i = 0; i < nums.size(); ++i)
             if (nums[i] > 0)
                 return {duplicate, i + 1};
-                
+
         return {};
     }
 };
