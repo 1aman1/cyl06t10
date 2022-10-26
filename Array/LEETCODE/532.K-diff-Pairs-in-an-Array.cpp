@@ -1,30 +1,32 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <unordered_map>
+
+using namespace std;
 
 class Solution
 {
 public:
-    int findPairs(std::vector<int> &nums, int k)
+    int findPairs(vector<int> &nums, int k)
     {
-        int countPairs = 0;
-        int prev_k_sum;
+        int result = 0;
+        unordered_map<int, int> cache;
 
-        std::sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); ++i)
+            cache[nums[i]] = i;
 
-        for (auto itr = nums.begin(); itr != nums.end(); ++itr)
+        for (int i = 0; i < nums.size(); ++i)
         {
-            int curr_sum_k = (*itr) + k;
-
-            if (prev_k_sum == curr_sum_k) // skip duplicate pair
-                continue;
-
-            prev_k_sum = curr_sum_k;
-            if (std::binary_search(itr + 1, nums.end(), curr_sum_k))
-                ++countPairs;
+            const int target = nums[i] + k;
+            if (cache.count(target) && cache[target] != i)
+            {
+                ++result;
+                cache.erase(target);
+            }
         }
 
-        return countPairs;
+        return result;
     }
 };
 
