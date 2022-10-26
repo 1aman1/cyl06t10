@@ -8,12 +8,17 @@ class Solution
 public:
     int pivotIndex(vector<int> &nums)
     {
-        int sum = accumulate(nums.begin(), nums.end(), 0);
+        const int sum = accumulate(nums.begin(), nums.end(), 0);
+        int runningPrefix = 0;
 
         for (int i = 0; i < nums.size(); ++i)
         {
-            
+            if (runningPrefix == sum - nums[i] - runningPrefix)
+                return i;
+            runningPrefix += nums[i];
         }
+        
+        return -1;
     }
 };
 
