@@ -1,43 +1,38 @@
 class Solution
 {
 public:
-    map<string, vector<string>> cache;
+    map<string, vector<string>> sortedToGroup;
 
-    void build_cache(map<string, vector<string>> &cache, vector<string> &strings)
+    void
+    build_cache(vector<string> &strings)
     {
         for (size_t i = 0; i < strings.size(); ++i)
         {
-            string curr_str = strings[i];
-            std::sort(strings[i].begin(), strings[i].end());
+            string eachString = strings[i];
+            sort(begin(eachString), end(eachString));
 
-            if (!cache.count(strings[i]))
-                cache.insert({strings[i], {curr_str}});
+            if (!sortedToGroup.count(eachString))
+                sortedToGroup.insert({eachString, {strings[i]}});
             else
-                cache[strings[i]].push_back(curr_str);
+                sortedToGroup[eachString].push_back(strings[i]);
         }
-        // strings.resize(0);
     }
 
-    vector<vector<string>> get_grouped_anagrams(const map<string, vector<string>> &cache)
+    vector<vector<string>>
+    groupAnagrams(vector<string> &strings)
     {
+        build_cache(strings);
+
         vector<vector<string>> result;
-        vector<string> sub_result;
+        vector<string> subResult;
 
-        for (const auto &i : cache)
+        for (auto [_, eachAnagram] : sortedToGroup)
         {
-            sub_result.resize(0);
-            for (const auto &j : i.second)
-                sub_result.push_back(j);
-            result.push_back(sub_result);
+            for (const auto i : eachAnagram)
+                subResult.push_back(i);
+            result.push_back(subResult);
+            subResult.resize(0);
         }
-        return result;
-    }
-
-    vector<vector<string>> groupAnagrams(vector<string> &strs)
-    {
-        build_cache(cache, strs);
-
-        vector<vector<string>> result = get_grouped_anagrams(cache);
 
         return result;
     }
