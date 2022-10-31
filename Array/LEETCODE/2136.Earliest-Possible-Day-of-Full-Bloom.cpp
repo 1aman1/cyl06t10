@@ -17,8 +17,7 @@ public:
         for (int i = 0; i < plantTime.size(); ++i)
             saplings.push_back({plantTime[i], growTime[i]});
 
-        sort(begin(saplings), end(saplings),
-             [](const auto &a, const auto &b)
+        sort(begin(saplings), end(saplings), [](const auto &a, const auto &b)
              { return a.growTime > b.growTime; });
 
         result = time = 0;
