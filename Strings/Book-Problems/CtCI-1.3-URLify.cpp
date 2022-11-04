@@ -1,6 +1,7 @@
 #include <iostream>
 
-std::string URLify(std::string Str, int trueLength)
+std::string
+URLify(std::string Str, int trueLength)
 {
     int spaceCount = 0;
 
@@ -11,21 +12,19 @@ std::string URLify(std::string Str, int trueLength)
             ++spaceCount;
     }
 
-    int fillerIndex = trueLength - spaceCount + spaceCount * 3;
+    int fillerIndex = trueLength - spaceCount + spaceCount * 3 - 1;
+
     for (int i = trueLength - 1; i >= 0; --i)
     {
         if (Str[i] == ' ')
         {
-            Str[fillerIndex - 0 - 1] = '0';
-            Str[fillerIndex - 1 - 1] = '2';
-            Str[fillerIndex - 2 - 1] = '%';
+            Str[fillerIndex - 0] = '0';
+            Str[fillerIndex - 1] = '2';
+            Str[fillerIndex - 2] = '%';
             fillerIndex -= 3;
         }
         else
-        {
-            Str[fillerIndex - 1] = Str[i];
-            --fillerIndex;
-        }
+            Str[fillerIndex--] = Str[i];
     }
 
     return Str;
@@ -33,12 +32,12 @@ std::string URLify(std::string Str, int trueLength)
 
 int main()
 {
-    // INPUT SEC
     std::string str1 = "Mr John Smith    ";
     int trueLength = 13;
 
     std::cout << std::boolalpha
-              << URLify(str1, trueLength) << std::endl;
+              << URLify(str1, trueLength)
+              << std::endl;
 
     return 0;
 }

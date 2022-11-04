@@ -4,7 +4,7 @@
 
 bool is_permutation_a_palindrome(std::string str)
 {
-    // read string , mark frequency of it's characters
+    // read string , mark occurrence of it's characters
     std::vector<bool> freqOfStrCharacters(26, false);
 
     for (int i = 0; i < str.length(); ++i)

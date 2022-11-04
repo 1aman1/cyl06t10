@@ -4,31 +4,29 @@
 class Solution
 {
 public:
-    int count_with_stl = 0;
+    int count = 0;
 
-    void permute_using_stl(std::string s);
+    void permutation(std::string S);
 };
 
-void Solution::permute_using_stl(std::string s)
+void Solution::permutation(std::string S)
 {
-    std::sort(s.begin(), s.end());
+    std::sort(S.begin(), S.end());
 
     do
     {
-        ++count_with_stl;
-        // std::cout << s << "\n";
-
-    } while (std::next_permutation(s.begin(), s.end()));
+        ++count;
+    } while (std::next_permutation(S.begin(), S.end()));
 }
 
 int main()
 {
     Solution obj;
 
-    std::string s = "racecar";
-    obj.permute_using_stl(s);
+    std::string S = "racecar";
+    obj.permutation(S);
 
-    std::cout << obj.count_with_stl << std::endl;
+    std::cout << obj.count << std::endl;
 
     return 0;
 }
