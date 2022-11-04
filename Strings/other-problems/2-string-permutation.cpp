@@ -4,31 +4,30 @@
 class Solution
 {
 public:
-    int count_without_stl = 0;
+    int count = 0;
 
     std::map<std::string, bool> map;
 
-    void permute(std::string a, int l, int r);
+    void permutation(std::string S, int l, int r);
 };
 
-void Solution::permute(std::string a, int l, int r)
+void Solution::permutation(std::string S, int l, int r)
 {
     if (l != r)
     {
         for (int i = l; i <= r; i++)
         {
-            std::swap(a[l], a[i]);
-            permute(a, l + 1, r);
-            std::swap(a[l], a[i]);
+            std::swap(S[l], S[i]);
+            permutation(S, l + 1, r);
+            std::swap(S[l], S[i]);
         }
     }
     else
     {
-        if (!map.count(a))
+        if (!map.count(S))
         {
-            // std::cout << a << std::endl;
-            ++count_without_stl;
-            map.insert({a, true});
+            ++count;
+            map.insert({S, true});
         }
     }
 }
@@ -39,9 +38,9 @@ int main()
 
     std::string s = "racecar";
 
-    obj.permute(s, 0, s.size() - 1);
+    obj.permutation(s, 0, s.size() - 1);
 
-    std::cout << obj.count_without_stl << std::endl;
+    std::cout << obj.count << std::endl;
 
     return 0;
 }

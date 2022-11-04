@@ -31,7 +31,7 @@ int afterCompressionLength(const std::string &str)
 
 std::string string_compression(const std::string &str)
 {
-    // to avoid a case where we generate a string of no use
+    // to avoid generating a string of no use
     if (str.length() <= afterCompressionLength(str))
         return str;
 

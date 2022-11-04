@@ -67,7 +67,10 @@ bool oneAway_2(std::string str1, std::string str2)
     std::string s1 = str1.length() < str2.length() ? str1 : str2;
     std::string s2 = str1.length() < str2.length() ? str2 : str1;
 
-    while (index1 < s1.length() && index2 < s2.length())
+    int s1Length = s1.length();
+    int s2Length = s2.length();
+
+    while (index1 < s1Length && index2 < s2Length)
     {
         if (s1[index1] != s2[index2])
         {
@@ -77,7 +80,7 @@ bool oneAway_2(std::string str1, std::string str2)
 
             onlyOneChar = true;
             // case for a replaced character
-            if (s1.length() == s2.length())
+            if (s1Length == s2Length)
                 ++index1;
         }
         else

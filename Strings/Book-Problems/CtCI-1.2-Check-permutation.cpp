@@ -10,23 +10,11 @@ bool is_permutation_1(std::string s1, std::string s2)
     std::vector<int> freq(26, 0);
 
     for (int i = 0; i < s1.length(); ++i)
-    {
         ++freq[s1[i] - 'a'];
-        std::cout << s1[i]
-                  << freq[s1[i] - 'a']
-                  << " " << std::endl;
-    }
 
     for (int i = 0; i < s2.length(); ++i)
-    {
-        if (freq[s2[i] - 'a'] < 1)
+        if (--freq[s2[i] - 'a'] < 0)
             return false;
-
-        --freq[s2[i] - 'a'];
-        std::cout << s2[i]
-                  << freq[s2[i] - 'a']
-                  << " " << std::endl;
-    }
 
     return true;
 }
@@ -54,7 +42,7 @@ int main()
 
     std::cout << std::boolalpha
               << is_permutation_1(str1, str2)
-              << is_permutation_2(str1, str2)
+              //   << is_permutation_2(str1, str2)
               << std::endl;
 
     return 0;

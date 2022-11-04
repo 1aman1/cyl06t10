@@ -1,36 +1,26 @@
 #include <iostream>
 #include <unordered_map>
 
-bool are_anagrams(std::string S1, std::string S2)
+bool are_anagrams(std::string lhs, std::string rhs)
 {
-    int len_S1 = S1.length();
-    int len_S2 = S2.length();
+    int len_S1 = lhs.length();
+    int len_S2 = rhs.length();
 
     if (len_S1 != len_S2)
         return false;
 
     std::unordered_map<char, int> lookup_S1;
-
-    for (int i = 0; i < len_S1; ++i)
-    {
-        ++lookup_S1[S1[i]];
-    }
-
     std::unordered_map<char, int> lookup_S2;
 
+    for (int i = 0; i < len_S1; ++i)
+        ++lookup_S1[lhs[i]];
+
     for (int i = 0; i < len_S2; ++i)
-    {
-        ++lookup_S2[S2[i]];
-    }
+        ++lookup_S2[rhs[i]];
 
     for (auto itr = lookup_S1.begin(); itr != lookup_S1.end(); ++itr)
-    {
-        // match frequency in both maps
-        if (itr->second == lookup_S2[itr->first])
-            continue;
-        else
+        if (itr->second != lookup_S2[itr->first])
             return false;
-    }
 
     return true;
 }
