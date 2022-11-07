@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 
 void printMatrix(const std::vector<std::vector<int>> &matrix)
 {
@@ -15,9 +16,17 @@ void printMatrix(const std::vector<std::vector<int>> &matrix)
     std::cout << std::endl;
 }
 
-bool rotateMatrix(std::vector<std::vector<int>> &matrix)
+bool rotateMatrix_2(std::vector<std::vector<int>> &grid)
 {
+    std::reverse(begin(grid), end(grid));
 
+    for (int i = 0; i < grid.size(); i++)
+        for (int j = i + 1; j < grid.size(); j++) // swaps upper triangle
+            std::swap(grid[i][j], grid[j][i]);
+}
+
+bool rotateMatrix_1(std::vector<std::vector<int>> &matrix)
+{
     if (matrix.empty() || matrix.at(0).size() != matrix.size())
     { // if not square
         return false;
@@ -61,7 +70,8 @@ int main()
         {13, 14, 15, 16}};
 
     printMatrix(matrix);
-    rotateMatrix(matrix);
+    rotateMatrix_1(matrix);
+    rotateMatrix_2(matrix);
     printMatrix(matrix);
 
     return 0;

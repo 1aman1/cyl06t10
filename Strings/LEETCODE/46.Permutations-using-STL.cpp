@@ -20,19 +20,26 @@ public:
     }
 };
 
+void print(const std::vector<std::vector<int>> &result)
+{
+    for (auto row : result)
+    {
+        for (auto col : row)
+        {
+            std::cout << col << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 int main()
 {
     std::vector<int> nums = {1, 2, 3};
     Solution obj;
+
     std::vector<std::vector<int>> result = obj.permute(nums);
-    for (auto row = result.begin(); row != result.end(); ++row)
-    {
-        for (auto col = row->begin(); col != row->end(); ++col)
-        {
-            std::cout << *col << " ";
-        }
-        std::cout << std::endl;
-    }
+
+    print(result);
 
     return 0;
 }
