@@ -302,10 +302,10 @@ node_t *AVL_tree_t::balance(node_t *curr_ptr)
     if (balance_factor < -1)
     {
         // right subtree is heavy
-        if (height_difference(curr_ptr->right) > 0)
-            curr_ptr = rl_rotation(curr_ptr);
-        else
+        if (height_difference(curr_ptr->right) < 0)
             curr_ptr = rr_rotation(curr_ptr);
+        else
+            curr_ptr = rl_rotation(curr_ptr);
     }
 
     return curr_ptr;
