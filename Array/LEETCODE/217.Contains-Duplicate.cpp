@@ -3,16 +3,16 @@ class Solution
 public:
     bool containsDuplicate(std::vector<int> &nums)
     {
-        std::set<int> lookup;
+        std::unordered_set<int> numCache;
 
         for (auto itr = nums.begin(); itr != nums.end(); ++itr)
         {
-            if (lookup.find(*itr) != lookup.end())
+            if (numCache.count(*itr))
                 return true;
 
-            lookup.insert(*itr);
+            numCache.insert(*itr);
         }
-        
+
         return false;
     }
 };
