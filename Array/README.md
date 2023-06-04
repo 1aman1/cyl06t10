@@ -1,3 +1,0 @@
-#Array
-
-few implementation examples.
