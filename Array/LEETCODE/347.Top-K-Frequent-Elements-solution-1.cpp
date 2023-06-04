@@ -6,34 +6,25 @@
 class Solution
 {
 public:
-    static bool customCompare(const std::pair<int, int> &a, const std::pair<int, int> &b)
-    {
-        return a.second > b.second;
-    }
-
     std::vector<int> topKFrequent(std::vector<int> &nums, int k)
     {
-        std::map<int, int> pairMap;
+        std::map<int, int> numberToFreq;
 
-        for (long unsigned int i = 0; i < nums.size(); ++i)
-        { // mark frequency for each
-            ++pairMap[nums[i]];
-        }
+        for (auto i = 0; i < nums.size(); ++i)
+            ++numberToFreq[nums[i]];
 
         std::vector<std::pair<int, int>> tmpVector;
 
-        // make vector to sort
-        for (auto &itr : pairMap)
+        for (auto &itr : numberToFreq)
             tmpVector.push_back({itr.first, itr.second});
 
-        std::sort(tmpVector.begin(), tmpVector.end(), customCompare);
+        sort(tmpVector.begin(), tmpVector.end(), [](const std::pair<int, int> &a, const std::pair<int, int> &b)
+             { return a.second > b.second; });
 
         std::vector<int> result;
 
         for (int i = 0; i < k; ++i)
-        {
             result.push_back(tmpVector[i].first);
-        }
 
         return result;
     }

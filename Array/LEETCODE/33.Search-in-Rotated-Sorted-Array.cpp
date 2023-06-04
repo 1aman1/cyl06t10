@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 
+using namespace std;
+
 class Solution
 {
 public:
@@ -35,20 +37,6 @@ public:
         return -1;
     }
 };
-
-// class Solution2
-// {
-// public:
-//     int search(std::vector<int> &nums, int target)
-//     {
-//         auto searchResult = std::find(nums.begin(), nums.end(), target);
-
-//         if (searchResult == nums.end())
-//             return -1;
-//         else
-//             return std::distance(begin(nums), searchResult);
-//     }
-// };
 
 int main()
 {
