@@ -13,6 +13,9 @@ public:
 
         for (int first = 0; first < SIZE - 2; ++first)
         {
+            if (nums[first] > 0)
+                break;
+
             if (first > 0 && nums[first] == nums[first - 1])
                 continue;
 
