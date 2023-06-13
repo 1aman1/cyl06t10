@@ -20,7 +20,7 @@ public:
             if (numberToFreq.find(nums[i]) == numberToFreq.end())
                 numberToFreq.insert({nums[i], 1});
             else
-                ++numberToFreq[i];
+                ++numberToFreq[nums[i]];
         }
 
         for (const auto &itr : numberToFreq)
@@ -41,8 +41,8 @@ public:
 
 int main()
 {
-    std::vector<int> nums = {1, 1, 1, 1, 1, 2, 2, 2, 3};
-    int k = 2;
+    std::vector<int> nums = {3, 0, 1, 0};
+    int k = 1;
     Solution obj;
     std::vector<int> result = obj.topKFrequent(nums, k);
 
